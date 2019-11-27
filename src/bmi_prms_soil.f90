@@ -1567,16 +1567,72 @@
       real, intent(in) :: src(:)
       integer :: bmi_status
     
-      select case(name)
-      !case("plate_soil__temperature")
-      !   this%model%temperature = reshape(src, [this%model%n_y, this%model%n_x])
-      !   bmi_status = BMI_SUCCESS
-      !case("plate_soil__thermal_diffusivity")
-      !   this%model%alpha = src(1)
-      !   bmi_status = BMI_SUCCESS
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+    select case(name)
+        !case("plate_surface__temperature")
+        !   src = c_loc(this%model%temperature(1,1))
+        !   n_elements = this%model%n_y * this%model%n_x
+        !   call c_f_pointer(src, dest, [n_elements])
+        !   bmi_status = BMI_SUCCESS
+    case('hru_ppt')
+        this%model%model_simulation%model_precip%hru_ppt = src
+        bmi_status = BMI_SUCCESS
+    case('hru_rain')
+        this%model%model_simulation%model_precip%hru_rain = src
+        bmi_status = BMI_SUCCESS
+    case('hru_snow')
+        this%model%model_simulation%model_precip%hru_snow = src
+        bmi_status = BMI_SUCCESS
+    case('hru_area')
+        this%model%model_simulation%model_basin%hru_area = src
+        bmi_status = BMI_SUCCESS
+    case('dprst_evap_hru')
+        this%model%model_simulation%runoff%dprst_evap_hru = src
+        bmi_status = BMI_SUCCESS
+    case('infil')
+        this%model%model_simulation%runoff%infil = src
+        bmi_status = BMI_SUCCESS
+    case('sroff')
+        this%model%model_simulation%runoff%sroff = src
+        bmi_status = BMI_SUCCESS
+    case('potet')
+        this%model%model_simulation%potet%potet = src
+        bmi_status = BMI_SUCCESS
+    case('hru_intcpevap')
+        this%model%model_simulation%intcp%hru_intcpevap = src
+        bmi_status = BMI_SUCCESS
+    case('snow_evap')
+        this%model%model_simulation%snow%snow_evap = src
+        bmi_status = BMI_SUCCESS
+    case('snowcov_area')
+        this%model%model_simulation%snow%snowcov_area = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr')
+        this%model%model_simulation%climate%soil_rechr = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_max')
+        this%model%model_simulation%climate%soil_rechr_max = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist')
+        this%model%model_simulation%climate%soil_moist = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        this%model%model_simulation%climate%soil_moist_max = src
+        bmi_status = BMI_SUCCESS
+    case('hru_area_perv')
+        this%model%model_simulation%runoff%hru_area_perv = src
+        bmi_status = BMI_SUCCESS
+    case('hru_impervevap')
+        this%model%model_simulation%runoff%hru_impervevap = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_chg')
+        this%model%model_simulation%runoff%soil_moist_chg = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_chg')
+        this%model%model_simulation%runoff%soil_rechr_chg = src
+        bmi_status = BMI_SUCCESS
+    case default
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_set_float
     
     ! Set new double values.
@@ -1586,10 +1642,28 @@
       double precision, intent(in) :: src(:)
       integer :: bmi_status
     
-      select case(name)
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+    select case(name)
+    case('basin_potet')
+        this%model%model_simulation%potet%basin_potet = src(1)
+        bmi_status = BMI_SUCCESS
+    case('basin_area_inv')
+        this%model%model_simulation%model_basin%basin_area_inv = src(1)
+        bmi_status = BMI_SUCCESS
+    case('basin_sroff')
+        this%model%model_simulation%runoff%basin_sroff = src(1)
+        bmi_status = BMI_SUCCESS
+    case('hortonian_lakes')
+        this%model%model_simulation%runoff%hortonian_lakes = src
+        bmi_status = BMI_SUCCESS
+    case('dprst_seep_hru')
+        this%model%model_simulation%runoff%dprst_seep_hru = src
+        bmi_status = BMI_SUCCESS
+    case('strm_seg_in')
+        this%model%model_simulation%runoff%strm_seg_in = src
+        bmi_status = BMI_SUCCESS
+    case default
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_set_double
     
     !! Set integer values at particular locations.

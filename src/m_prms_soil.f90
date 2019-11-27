@@ -167,40 +167,56 @@
         !if (.not. this%model_time%next(ctl_data, this%model_basin)) exit
         ! print *, this%model_time%Nowyear, this%model_time%Nowmonth, this%model_time%Nowday
 
-        call this%model_basin%run(ctl_data, this%model_time)
-        call this%model_temp%run(ctl_data, this%model_basin, this%model_time, this%model_summary)
-        ! print *, '1'
-        call this%model_precip%run(ctl_data, this%model_basin, this%model_temp, this%model_time, &
-            this%model_summary)
-        ! call this%climate_by_hru%run(ctl_data, param_data, this%model_time, &
-        !                              this%model_basin, this%potet, this%model_temp, &
-        !                              this%climate)
-        ! print *, '2'
-        call this%solrad%run(ctl_data, this%model_time, &
-                             this%model_precip, this%model_basin, this%model_temp)
-
-        ! print *, '3'
-        call this%transpiration%run(ctl_data, this%model_time, &
-                                    this%model_basin, this%model_temp)
-
-        ! print *, '4'
-        call this%potet%run(ctl_data, this%model_basin, this%model_time, &
-                           this%solrad, this%model_temp)
-
-        ! print *, '5'
-        call this%intcp%run(ctl_data, this%model_basin, this%potet, &
-                            this%model_precip, this%transpiration, this%climate, this%model_time)
-
-        ! print *, '6'
-        call this%snow%run(ctl_data, this%model_basin, this%model_time, this%climate, &
-                           this%model_precip, this%model_temp, &
-                           this%intcp, this%solrad, this%potet, this%transpiration)
-
-        ! print *, '7'
-        call this%runoff%run(ctl_data, this%model_basin, this%climate, &
-                             this%potet, this%intcp, this%snow, this%model_time)
+        !call this%model_basin%run(ctl_data, this%model_time)
+        !call this%model_temp%run(ctl_data, this%model_basin, this%model_time, this%model_summary)
+        !! print *, '1'
+        !call this%model_precip%run(ctl_data, this%model_basin, this%model_temp, this%model_time, &
+        !    this%model_summary)
+        !! call this%climate_by_hru%run(ctl_data, param_data, this%model_time, &
+        !!                              this%model_basin, this%potet, this%model_temp, &
+        !!                              this%climate)
+        !! print *, '2'
+        !call this%solrad%run(ctl_data, this%model_time, &
+        !                     this%model_precip, this%model_basin, this%model_temp)
+        !
+        !! print *, '3'
+        !call this%transpiration%run(ctl_data, this%model_time, &
+        !                            this%model_basin, this%model_temp)
+        !
+        !! print *, '4'
+        !call this%potet%run(ctl_data, this%model_basin, this%model_time, &
+        !                   this%solrad, this%model_temp)
+        !
+        !! print *, '5'
+        !call this%intcp%run(ctl_data, this%model_basin, this%potet, &
+        !                    this%model_precip, this%transpiration, this%climate, this%model_time)
+        !
+        !! print *, '6'
+        !call this%snow%run(ctl_data, this%model_basin, this%model_time, this%climate, &
+        !                   this%model_precip, this%model_temp, &
+        !                   this%intcp, this%solrad, this%potet, this%transpiration)
+        !
+        !! print *, '7'
+        !call this%runoff%run(ctl_data, this%model_basin, this%climate, &
+        !                     this%potet, this%intcp, this%snow, this%model_time)
 
         ! print *, '8'
+        call this%soil%run(ctl_data, this%model_basin, this%model_time, &
+                           this%potet, this%model_precip, this%climate, this%intcp, &
+                           this%snow, this%transpiration, this%runoff)
+
+        ! print *, '9'
+        call this%groundwater%run(ctl_data, this%model_basin, &
+                                  this%climate, this%intcp, this%soil, this%runoff, &
+                                  this%model_time)
+
+        ! call this%model_route%run(ctl_data, param_data, this%model_basin, this%climate, this%groundwater, this%soil, this%runoff, this%model_time, this%solrad)
+
+        ! print *, '10'
+        call this%model_streamflow%run(ctl_data, this%model_basin, &
+                                      this%potet, this%groundwater, this%soil, &
+                                      this%runoff, this%model_time, this%solrad, &
+                                      this%model_obs)
 
         if (ctl_data%outVarON_OFF%value == 1) then
           call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
