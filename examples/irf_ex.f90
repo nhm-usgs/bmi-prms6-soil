@@ -35,6 +35,18 @@ program irf_test
   write (*,*) "Done"
   
     contains
+    function soil2surface(msurf, msoil) result(code)
+        type (bmi_prms_surface), intent(in) :: msurf
+        type (bmi_prms_soil), intent(inout) :: msoil
+        real, allocatable, dimension(:) :: r32var
+        integer, allocatable, dimension(:) :: i32var
+        double precision, allocatable, dimension(:) :: r64var
+        integer :: code
+        integer :: gridid1,gridid2, nelem, nelem1, nelem2
+        
+        
+    end function soil2surface
+    
     function surface2soil(msurf, msoil) result(code)
         type (bmi_prms_surface), intent(in) :: msurf
         type (bmi_prms_soil), intent(inout) :: msoil
