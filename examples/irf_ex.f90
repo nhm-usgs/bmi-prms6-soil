@@ -19,12 +19,13 @@ program irf_test
   write (*,"(a)",advance="no") "Initializing..."
   s = m_surf%initialize(control_file1)
   s = m_soil%initialize(control_file2)
-  s = surface2soil(m_surf, m_soil)
+  !s = surface2soil(m_surf, m_soil)
   s = m_surf%get_end_time(endtime)
   do i = 1,int(endtime)
       s = m_surf%update()
-      s = surface2soil(m_surf,m_soil)
+      s = surface2soil(m_surf, m_soil)
       s = m_soil%update()
+      s = soil2surface(m_surf, m_soil)
   enddo
   write (*,*) "Done."
 
@@ -36,14 +37,102 @@ program irf_test
   
     contains
     function soil2surface(msurf, msoil) result(code)
-        type (bmi_prms_surface), intent(in) :: msurf
-        type (bmi_prms_soil), intent(inout) :: msoil
+        type (bmi_prms_surface), intent(inout) :: msurf
+        type (bmi_prms_soil), intent(in) :: msoil
         real, allocatable, dimension(:) :: r32var
         integer, allocatable, dimension(:) :: i32var
         double precision, allocatable, dimension(:) :: r64var
         integer :: code
         integer :: gridid1,gridid2, nelem, nelem1, nelem2
         
+        !double precision
+        nelem  = getvarsize(msurf, msoil, 'basin_sroff')
+        call allocr64var(r64var, nelem)
+        code = msoil%get_value('basin_sroff', r64var)
+        code = msurf%set_value('basin_sroff', r64var)
+        
+        !nelem  = getvarsize(msurf, msoil, 'dprst_seep_hru')
+        !call allocr64var(r64var, nelem)
+        !code = msoil%get_value('dprst_seep_hru', r64var)
+        !code = msurf%set_value('dprst_seep_hru', r64var)
+        
+        !nelem  = getvarsize(msurf, msoil, 'strm_seg_in')
+        !call allocr64var(r64var, nelem)
+        !code = msoil%get_value('strm_seg_in', r64var)
+        !code = msurf%set_value('strm_seg_in', r64var)
+        !
+        nelem  = getvarsize(msurf, msoil, 'basin_potet')
+        call allocr64var(r64var, nelem)
+        code = msoil%get_value('basin_potet', r64var)
+        code = msurf%set_value('basin_potet', r64var)
+
+        !reals
+
+        !nelem  = getvarsize(msurf, msoil, 'dprst_evap_hru')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('dprst_evap_hru', r32var)
+        !code = msurf%set_value('dprst_evap_hru', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'hru_area_perv')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('hru_area_perv', r32var)
+        !code = msurf%set_value('hru_area_perv', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'hru_impervevap')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('hru_impervevap', r32var)
+        !code = msurf%set_value('hru_impervevap', r32var)
+
+        nelem  = getvarsize(msurf, msoil, 'infil')
+        call allocr32var(r32var, nelem)
+        code = msoil%get_value('infil', r32var)
+        code = msurf%set_value('infil', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'soil_moist_chg')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('soil_moist_chg', r32var)
+        !code = msurf%set_value('soil_moist_chg', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'soil_rechr_chg')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('soil_rechr_chg', r32var)
+        !code = msurf%set_value('soil_rechr_chg', r32var)
+
+        nelem  = getvarsize(msurf, msoil, 'sroff')
+        call allocr32var(r32var, nelem)
+        code = msoil%get_value('sroff', r32var)
+        code = msurf%set_value('sroff', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'potet')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('potet', r32var)
+        !code = msurf%set_value('potet', r32var)
+
+        nelem  = getvarsize(msurf, msoil, 'soil_rechr')
+        call allocr32var(r32var, nelem)
+        code = msoil%get_value('soil_rechr', r32var)
+        code = msurf%set_value('soil_rechr', r32var)
+
+        !nelem  = getvarsize(msurf, msoil, 'soil_rechr_max')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('soil_rechr_max', r32var)
+        !code = msurf%set_value('soil_rechr_max', r32var)
+        !
+        nelem  = getvarsize(msurf, msoil, 'soil_moist')
+        call allocr32var(r32var, nelem)
+        code = msoil%get_value('soil_moist', r32var)
+        code = msurf%set_value('soil_moist', r32var)
+
+        nelem  = getvarsize(msurf, msoil, 'soil_moist_max')
+        call allocr32var(r32var, nelem)
+        code = msoil%get_value('soil_moist_max', r32var)
+        code = msurf%set_value('soil_moist_max', r32var)
+
+        !integers
+        !nelem  = getvarsize(msurf, msoil, 'srunoff_updated_soil')
+        !call alloci32var(i32var, nelem)
+        !code = msoil%get_value('srunoff_updated_soil', i32var)
+        !code = msurf%set_value('srunoff_updated_soil', i32var)
         
     end function soil2surface
     
@@ -58,7 +147,6 @@ program irf_test
 
         nelem  = getvarsize(msurf, msoil, 'basin_potet')
         call allocr64var(r64var, nelem)
-        
         code = msurf%get_value('basin_potet', r64var)
         code = msoil%set_value('basin_potet', r64var)
         
@@ -72,20 +160,20 @@ program irf_test
         code = msurf%get_value('hru_ppt', r32var)
         code = msoil%set_value('hru_ppt', r32var)
 
-        nelem  = getvarsize(msurf, msoil, 'hru_rain')
+        nelem  = getvarsize(msurf, msoil, 'hru_area_perv')
         call allocr32var(r32var, nelem)
-        code = msurf%get_value('hru_rain', r32var)
-        code = msoil%set_value('hru_rain', r32var)
-
-        nelem  = getvarsize(msurf, msoil, 'hru_snow')
-        call allocr32var(r32var, nelem)
-        code = msurf%get_value('hru_snow', r32var)
-        code = msoil%set_value('hru_snow', r32var)
+        code = msurf%get_value('hru_area_perv', r32var)
+        code = msoil%set_value('hru_area_perv', r32var)
         
-        nelem  = getvarsize(msurf, msoil, 'hru_actet')
+        nelem  = getvarsize(msurf, msoil, 'hru_frac_perv')
         call allocr32var(r32var, nelem)
-        code = msurf%get_value('hru_actet', r32var)
-        code = msoil%set_value('hru_actet', r32var)
+        code = msurf%get_value('hru_frac_perv', r32var)
+        code = msoil%set_value('hru_frac_perv', r32var)
+        
+        nelem  = getvarsize(msurf, msoil, 'soil_rechr_max')
+        call allocr32var(r32var, nelem)
+        code = msurf%get_value('soil_rechr_max', r32var)
+        code = msoil%set_value('soil_rechr_max', r32var)
 
         nelem  = getvarsize(msurf, msoil, 'dprst_evap_hru')
         call allocr32var(r32var, nelem)
@@ -93,14 +181,9 @@ program irf_test
         code = msoil%set_value('dprst_evap_hru', r32var)
 
         nelem  = getvarsize(msurf, msoil, 'dprst_seep_hru')
-        call allocr32var(r32var, nelem)
-        code = msurf%get_value('dprst_seep_hru', r32var)
-        code = msoil%set_value('dprst_seep_hru', r32var)
-        
-        !nelem  = getvarsize(msurf, msoil, 'dprst_seep_hru')
-        !call allocr32var(r32var, nelem)
-        !code = msurf%get_value('dprst_seep_hru', r32var)
-        !code = msoil%set_value('dprst_seep_hru', r32var)
+        call allocr64var(r64var, nelem)
+        code = msurf%get_value('dprst_seep_hru', r64var)
+        code = msoil%set_value('dprst_seep_hru', r64var)
 
         nelem  = getvarsize(msurf, msoil, 'infil')
         call allocr32var(r32var, nelem)
@@ -121,11 +204,6 @@ program irf_test
         call allocr32var(r32var, nelem)
         code = msurf%get_value('transp_on', r32var)
         code = msoil%set_value('transp_on', r32var)
-        !
-        !nelem  = getvarsize(msurf, msoil, 'transp_on')
-        !call allocr32var(r32var, nelem)
-        !code = msurf%get_value('transp_on', r32var)
-        !code = msoil%set_value('transp_on', r32var)
 
         nelem  = getvarsize(msurf, msoil, 'hru_intcpevap')
         call allocr32var(r32var, nelem)
@@ -146,16 +224,26 @@ program irf_test
         call allocr32var(r32var, nelem)
         code = msurf%get_value('soil_rechr', r32var)
         code = msoil%set_value('soil_rechr', r32var)
+        
+        nelem  = getvarsize(msurf, msoil, 'soil_rechr_max')
+        call allocr32var(r32var, nelem)
+        code = msurf%get_value('soil_rechr_max', r32var)
+        code = msoil%set_value('soil_rechr_max', r32var)
 
         nelem  = getvarsize(msurf, msoil, 'soil_moist')
         call allocr32var(r32var, nelem)
         code = msurf%get_value('soil_moist', r32var)
         code = msoil%set_value('soil_moist', r32var)
 
-        nelem  = getvarsize(msurf, msoil, 'hru_imperv_evap')
+        nelem  = getvarsize(msurf, msoil, 'soil_moist_max')
         call allocr32var(r32var, nelem)
-        code = msurf%get_value('hru_imperv_evap', r32var)
-        code = msoil%set_value('hru_imperv_evap', r32var)
+        code = msurf%get_value('soil_moist_max', r32var)
+        code = msoil%set_value('soil_moist_max', r32var)
+
+        nelem  = getvarsize(msurf, msoil, 'hru_impervevap')
+        call allocr32var(r32var, nelem)
+        code = msurf%get_value('hru_impervevap', r32var)
+        code = msoil%set_value('hru_impervevap', r32var)
 
         nelem  = getvarsize(msurf, msoil, 'soil_moist_chg')
         call allocr32var(r32var, nelem)
@@ -227,6 +315,13 @@ program irf_test
         
     subroutine allocr32var(var, size)
         real, allocatable, intent(inout) :: var(:)
+        integer, intent(in) :: size
+        if (allocated(var)) deallocate(var)
+        allocate(var(size))
+    end subroutine
+
+    subroutine alloci32var(var, size)
+        integer, allocatable, intent(inout) :: var(:)
         integer, intent(in) :: size
         if (allocated(var)) deallocate(var)
         allocate(var(size))

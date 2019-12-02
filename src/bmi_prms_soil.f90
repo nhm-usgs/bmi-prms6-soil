@@ -129,7 +129,7 @@
     integer :: bmi_status
     input_items(1) = 'soil_rechr_chg'
     input_items(2) = 'soil_moist_chg'
-    input_items(3) = 'hru_imperv_evap'
+    input_items(3) = 'hru_impervevap'
     input_items(4) = 'hru_frac_perv'
     input_items(5) = 'hru_area_perv'
     input_items(6) = 'active_mask'
@@ -310,7 +310,7 @@
     case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
         'hru_y', 'hru_elev', 'hru_actet', 'hortonian_lakes', &
         'lakein_sz', 'cov_type', 'hru_area', 'hru_type', &
-        'dpsrt_evap_hru', 'dprst_seep_hru', 'infil', &
+        'dprst_evap_hru', 'dprst_seep_hru', 'infil', &
         'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
         'snow_evap', 'snowcov_area', 'soil_rechr', &
         'soil_rechr_max', 'soil_moist', 'soil_moist_max', &

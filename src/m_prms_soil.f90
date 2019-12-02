@@ -205,19 +205,19 @@
                            this%potet, this%model_precip, this%climate, this%intcp, &
                            this%snow, this%transpiration, this%runoff)
 
-        ! print *, '9'
-        call this%groundwater%run(ctl_data, this%model_basin, &
-                                  this%climate, this%intcp, this%soil, this%runoff, &
-                                  this%model_time)
+        !! print *, '9'
+        !call this%groundwater%run(ctl_data, this%model_basin, &
+        !                          this%climate, this%intcp, this%soil, this%runoff, &
+        !                          this%model_time)
 
         ! call this%model_route%run(ctl_data, param_data, this%model_basin, this%climate, this%groundwater, this%soil, this%runoff, this%model_time, this%solrad)
 
         ! print *, '10'
-        call this%model_streamflow%run(ctl_data, this%model_basin, &
-                                      this%potet, this%groundwater, this%soil, &
-                                      this%runoff, this%model_time, this%solrad, &
-                                      this%model_obs)
-
+        !call this%model_streamflow%run(ctl_data, this%model_basin, &
+        !                              this%potet, this%groundwater, this%soil, &
+        !                              this%runoff, this%model_time, this%solrad, &
+        !                              this%model_obs)
+        !
         if (ctl_data%outVarON_OFF%value == 1) then
           call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
         end if
