@@ -123,11 +123,11 @@ program irf_test
         code = msoil%get_value('soil_moist', r32var)
         code = msurf%set_value('soil_moist', r32var)
 
-        nelem  = getvarsize(msurf, msoil, 'soil_moist_max')
-        call allocr32var(r32var, nelem)
-        code = msoil%get_value('soil_moist_max', r32var)
-        code = msurf%set_value('soil_moist_max', r32var)
-
+        !nelem  = getvarsize(msurf, msoil, 'soil_moist_max')
+        !call allocr32var(r32var, nelem)
+        !code = msoil%get_value('soil_moist_max', r32var)
+        !code = msurf%set_value('soil_moist_max', r32var)
+        !
         !integers
         !nelem  = getvarsize(msurf, msoil, 'srunoff_updated_soil')
         !call alloci32var(i32var, nelem)
@@ -311,6 +311,7 @@ program irf_test
         integer, intent(in) :: size
         if (allocated(var)) deallocate(var)
         allocate(var(size))
+        var = 0.0d0
     end subroutine
         
     subroutine allocr32var(var, size)
@@ -318,6 +319,7 @@ program irf_test
         integer, intent(in) :: size
         if (allocated(var)) deallocate(var)
         allocate(var(size))
+        var = 0.0
     end subroutine
 
     subroutine alloci32var(var, size)
@@ -325,6 +327,7 @@ program irf_test
         integer, intent(in) :: size
         if (allocated(var)) deallocate(var)
         allocate(var(size))
+        var = 0
     end subroutine
 
 end program irf_test

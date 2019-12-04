@@ -175,8 +175,6 @@
     input_items(42) = 'cascade_flag'
     ! var boolean    
     input_items(43) = 'srunoff_updated_soil'
-    input_items(44) = 'soil_moist'
-    input_items(45) = 'soil_moist_max'
     ! var time
     input_items(46) = 'nowtime'
 

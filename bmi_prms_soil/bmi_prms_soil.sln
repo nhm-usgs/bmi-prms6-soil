@@ -8,6 +8,9 @@ EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_set_value", "test_set_value\test_set_value.vfproj", "{0CC7AAA9-4299-4E83-9FF3-8920176F154E}"
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "irf_ex", "irf_ex\irf_ex.vfproj", "{FAE06685-C62A-42CC-A557-4BEB5DA47F8F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{637D81BB-3839-408E-8D98-3FAB44AEF0CE} = {637D81BB-3839-408E-8D98-3FAB44AEF0CE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
