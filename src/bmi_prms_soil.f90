@@ -1628,6 +1628,9 @@
     case('soil_rechr_chg')
         this%model%model_simulation%runoff%soil_rechr_chg = src
         bmi_status = BMI_SUCCESS
+    case('hru_frac_perv')
+        this%model%model_simulation%runoff%hru_frac_perv = src
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select

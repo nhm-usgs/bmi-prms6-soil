@@ -196,7 +196,7 @@ outVarON_OFF
 1
 ####
 outVar_names
-25
+27
 4
 hru_actet
 hru_impervevap
@@ -223,6 +223,8 @@ contrib_fraction
 imperv_stor
 potet
 basin_potet
+basin_sroff
+strm_seg_in
 ####
 outVar_base_filename
 1
