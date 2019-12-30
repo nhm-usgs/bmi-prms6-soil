@@ -84,7 +84,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 46
-    integer, parameter :: output_item_count = 1
+    integer, parameter :: output_item_count = 4
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items 
     character (len=BMI_MAX_VAR_NAME), target, &
@@ -188,6 +188,9 @@
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
     output_items(1) = 'soil_moist_tot'
+    output_items(2) = 'soil_to_gw'
+    output_items(3) = 'ssr_to_gw'
+    output_items(4) = 'ssres_flow'
     names => output_items
     bmi_status = BMI_SUCCESS
     end function prms_output_var_names
@@ -538,7 +541,7 @@
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
-        'soil_rech_chg', 'gw2sm_grav', 'soil_moist_total')
+        'soil_rech_chg', 'gw2sm_grav', 'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         type = "real"
         bmi_status = BMI_SUCCESS
     case("seg_gwflow", "seg_inflow", "seg_outflow", 'basin_potet', &
@@ -573,7 +576,8 @@
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav', 'basin_potet', &
-        'basin_sroff', 'lakein_sz', 'dprst_seep_hru')
+        'basin_sroff', 'lakein_sz', 'dprst_seep_hru', &
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         units = "in"
         bmi_status = BMI_SUCCESS
     case("seg_inflow", "seg_outflow", 'strm_seg_in', 'hru_area')
@@ -706,6 +710,19 @@
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
         size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_tot')
+        size = sizeof(this%model%model_simulation%soil%soil_moist_tot(1))
+        bmi_status = BMI_SUCCESS
+    case('soil_to_gw')
+        size = sizeof(this%model%model_simulation%soil%soil_to_gw(1))
+        bmi_status = BMI_SUCCESS
+    case('ssr_to_gw')
+        size = sizeof(this%model%model_simulation%soil%ssr_to_gw(1))
+        bmi_status = BMI_SUCCESS
+    case('ssres_flow')
+        size = sizeof(this%model%model_simulation%soil%ssres_flow(1))
+        bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
@@ -881,6 +898,19 @@
     case('soil_rechr_chg')
         dest = [this%model%model_simulation%runoff%soil_rechr_chg]
         bmi_status = BMI_SUCCESS
+    case('soil_moist_tot')
+        dest = [this%model%model_simulation%soil%soil_moist_tot]
+        bmi_status = BMI_SUCCESS
+    case('soil_to_gw')
+        dest = [this%model%model_simulation%soil%soil_to_gw]
+        bmi_status = BMI_SUCCESS
+    case('ssr_to_gw')
+        dest = [this%model%model_simulation%soil%ssr_to_gw]
+        bmi_status = BMI_SUCCESS
+    case('ssres_flow')
+        dest = [this%model%model_simulation%soil%ssres_flow]
+        bmi_status = BMI_SUCCESS
+
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
@@ -1142,6 +1172,31 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
+    case('soil_moist_tot')
+        src = c_loc(this%model%model_simulation%soil%soil_moist_tot(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_to_gw')
+        src = c_loc(this%model%model_simulation%soil%soil_to_gw(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('ssr_to_gw')
+        src = c_loc(this%model%model_simulation%soil%ssr_to_gw(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('ssres_flow')
+        src = c_loc(this%model%model_simulation%soil%ssres_flow(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+
         case default
         bmi_status = BMI_FAILURE
     end select
@@ -1452,6 +1507,42 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
+    case('soil_moist_tot')
+        src = c_loc(this%model%model_simulation%soil%soil_moist_tot(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('soil_to_gw')
+        src = c_loc(this%model%model_simulation%soil%soil_to_gw(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssr_to_gw')
+        src = c_loc(this%model%model_simulation%soil%ssr_to_gw(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssres_flow')
+        src = c_loc(this%model%model_simulation%soil%ssres_flow(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
         case default
         bmi_status = BMI_FAILURE
     end select
@@ -1513,7 +1604,7 @@
       !case("model__identification_number")
       !   this%model%id = src(1)
       !   bmi_status = BMI_SUCCESS
-                case("nlake")
+      case("nlake")
          this%model%model_simulation%model_basin%nlake = src(1)
          bmi_status = BMI_SUCCESS
       case('active_hrus')
