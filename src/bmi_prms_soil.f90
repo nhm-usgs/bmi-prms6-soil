@@ -316,7 +316,8 @@
         'snow_evap', 'snowcov_area', 'soil_rechr', &
         'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'active_mask', 'hru_area_perv', 'hru_frac_perv', &
-        'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg')
+        'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg', &
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         grid = 0
         bmi_status = BMI_SUCCESS
     case('seg_gwflow', 'seg_inflow', 'seg_outflow', 'strm_seg_in')
