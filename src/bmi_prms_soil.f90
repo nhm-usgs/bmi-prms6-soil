@@ -66,13 +66,13 @@
          set_value_int, &
          set_value_float, &
          set_value_double
-    !procedure :: set_value_at_indices_int => prms_set_at_indices_int
-    !procedure :: set_value_at_indices_float => prms_set_at_indices_float
-    !procedure :: set_value_at_indices_double => prms_set_at_indices_double
-    !generic :: set_value_at_indices => &
-    !     set_value_at_indices_int, &
-    !     set_value_at_indices_float, &
-    !     set_value_at_indices_double
+    procedure :: set_value_at_indices_int => prms_set_at_indices_int
+    procedure :: set_value_at_indices_float => prms_set_at_indices_float
+    procedure :: set_value_at_indices_double => prms_set_at_indices_double
+    generic :: set_value_at_indices => &
+         set_value_at_indices_int, &
+         set_value_at_indices_float, &
+         set_value_at_indices_double
     !procedure :: print_model_info
     end type bmi_prms_soil
 
@@ -186,54 +186,6 @@
     class (bmi_prms_soil), intent(in) :: this
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
-    !input_items(1) = 'soil_rechr_chg'
-    !input_items(2) = 'soil_moist_chg'
-    !input_items(3) = 'hru_impervevap'
-    !input_items(4) = 'hru_frac_perv'
-    !input_items(5) = 'hru_area_perv'
-    !input_items(7) = 'soil_moist_max'
-    !input_items(8) = 'soil_moist'
-    !input_items(9) = 'soil_rechr_max'
-    !input_items(10) = 'soil_rechr'
-    !input_items(11) = 'snowcov_area'
-    !input_items(12) = 'snow_evap'
-    !input_items(13) = 'hru_intcpevap'
-    !input_items(14) = 'transp_on'
-    !input_items(27) = 'hru_ppt'
-    !input_items(15) = 'potet'
-    !input_items(16) = 'sroff'
-    !input_items(17) = 'infil'
-    !input_items(18) = 'dprst_seep_hru'
-    !input_items(19) = 'dprst_evap_hru'
-    !!input_items(20) = 'hru_type'
-    !!input_items(21) = 'hru_area'
-    !!input_items(22) = 'cov_type'
-    !!input_items(23) = 'lakein_sz'
-    !!input_items(24) = 'hortonian_lakes'
-    !! vars by nsegment  
-    !!input_items(28) = 'seg_outflow'
-    !!input_items(29) = 'seg_inflow'
-    !!input_items(30) = 'seg_gwflow'
-    !input_items(31) = 'strm_seg_in'
-    !! vars by nhrucell
-    !!input_items(32) = 'Gw2sm_grav'
-    !!vars by nhru_active
-    !!input_items(33) = 'hru_route_order'
-    !! vars dim by one    
-    !!input_items(34) = 'srunoff_updated_soil'
-    !input_items(35) = 'basin_sroff'
-    !!input_items(36) = 'basin_area_inv'
-    !!input_items(37) = 'active_hrus'
-    !input_items(38) = 'basin_potet'
-    !!input_items(39) = 'nlake'
-    !!input_items(40) = 'gsflow_mode'
-    !!input_items(41) = 'dprst_flag'
-    !!input_items(42) = 'cascade_flag'
-    !! var boolean    
-    !input_items(43) = 'srunoff_updated_soil'
-    !! var time
-    !input_items(46) = 'nowtime'
-    !
     names => input_items
     bmi_status = BMI_SUCCESS
     end function prms_input_var_names
@@ -243,10 +195,6 @@
     class (bmi_prms_soil), intent(in) :: this
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
-    !output_items(1) = 'soil_moist_tot'
-    !output_items(2) = 'soil_to_gw'
-    !output_items(3) = 'ssr_to_gw'
-    !output_items(4) = 'ssres_flow'
     names => output_items
     bmi_status = BMI_SUCCESS
     end function prms_output_var_names
@@ -364,14 +312,32 @@
     integer :: bmi_status
 
     select case(name)
-    case('hru_ppt', 'hru_x', &
-        'hru_y', 'hru_elev', 'hru_actet', &
-        'dprst_evap_hru', 'dprst_seep_hru', 'infil', &
-        'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
-        'snow_evap', 'snowcov_area', 'soil_rechr', &
-        'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'hru_area_perv', 'hru_frac_perv', &
-        'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg', &
+    case( &
+            !this (bmi)
+        'hru_x', 'hru_y', 'hru_elev', &
+            
+            !runoff
+        'dprst_evap_hru', 'dprst_seep_hru','hru_area_perv', 'hru_frac_perv', &
+        'infil', 'sroff', 'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg', &
+        
+            !precipitation
+        'hru_ppt', & 
+            !potet
+        'potet', &
+        
+            !traspiration
+        'transp_on', &
+        
+            !intcp
+        'hru_intcpevap', &
+            
+            !snow
+        'snow_evap', 'snowcov_area', &
+        
+            !climate
+        'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
+        
+            !soil (this)
         'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         grid = 0
         bmi_status = BMI_SUCCESS
@@ -381,12 +347,6 @@
     case('basin_potet', 'srunoff_updated_soil')
         grid = 2
         bmi_status = BMI_SUCCESS
-    !case('hru_route_order')
-    !    grid = 3 ! nhru_active
-    !    bmi_status = BMI_SUCCESS
-    !case('Gw2sm_grav')
-    !    grid = 4 ! by nhrucell
-    !    bmi_status = BMI_SUCCESS
     case default
         grid = -1
         bmi_status = BMI_FAILURE
@@ -410,12 +370,6 @@
     case(2)
         type = 'scalar'
         bmi_status = BMI_FAILURE
-    case(3)
-        type = "vector"
-        bmi_status = BMI_SUCCESS
-    case(4)
-        type = "vector"
-        bmi_status = BMI_SUCCESS
     case default
         type = "-"
         bmi_status = BMI_FAILURE
@@ -438,12 +392,6 @@
         bmi_status = BMI_SUCCESS
     case(2)
         rank = 0
-        bmi_status = BMI_SUCCESS
-    case(3)
-        rank = 1
-        bmi_status = BMI_SUCCESS
-    case(4)
-        rank = 1
         bmi_status = BMI_SUCCESS
     case default
         rank = -1
@@ -484,12 +432,6 @@
         bmi_status = BMI_SUCCESS
     case(2)
         size = 1
-        bmi_status = BMI_SUCCESS
-    case(3)
-        size = count(this%model%model_simulation%model_basin%active_mask)
-        bmi_status = BMI_SUCCESS
-    case(4)
-        size = this%model%model_simulation%soil%nhrucell
         bmi_status = BMI_SUCCESS
     case default
         size = -1
@@ -590,22 +532,39 @@
     integer :: bmi_status
 
     select case(name)
-    case("hru_ppt", &
-        "hru_actet", 'dprst_evap_hru', 'infil', &
-        'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
-        'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
-        'soil_rech_chg', 'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
+    case( &
+            !precipitation
+        "hru_ppt", &
+        
+            !runoff
+        'dprst_evap_hru', 'infil', 'sroff', 'hru_area_perv', 'hru_frac_perv', &
+        'hru_impervevap', 'soil_moist_chg', 'soil_rech_chg', &
+        
+            !potet
+        'potet', &
+        
+            !intcp
+        'hru_intcpevap', &
+        
+            !snow
+        'snow_evap', 'snowcov_area', &
+        
+            !climate
+        'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
+        
+        
+            !soil (this)
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         type = "real"
         bmi_status = BMI_SUCCESS
-    case('basin_potet', &
+    case( 'soil_rechr', 'basin_potet','basin_sroff', &
         'dprst_seep_hru', 'strm_seg_in')
         type = "double"
         bmi_status = BMI_SUCCESS
     case('nowtime')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil')
+    case('srunoff_updated_soil', 'transp_on')
             type = 'logical'
             bmi_status = BMI_SUCCESS
     case default
@@ -622,17 +581,37 @@
     integer :: bmi_status
 
     select case(name)
-    case("hru_ppt", &
-        "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
-        'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
-        'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav', 'basin_potet', &
+    case( &
+        !precipitation
+        "hru_ppt", &
+        
+        !runoff
+        'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_ch', 'soil_rechr_chg', &
         'basin_sroff', 'dprst_seep_hru', &
+        !potet
+        'potet', &
+        
+        !intcp
+        'hru_intcpevap', &
+        
+        !snow
+        'snow_evap', &
+        
+        !climate
+        'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
+        
+        !potet
+        'basin_potet', &
+        
+        !soil (this)
         'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
         units = "ft3 s-1"
+        bmi_status = BMI_SUCCESS
+    case('snow_cov_area')
+        units = 'acres'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
@@ -716,6 +695,9 @@
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
         size = sizeof(this%model%model_simulation%runoff%strm_seg_in)
+        bmi_status = BMI_SUCCESS
+    case('hru_frac_perv')
+        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv)
         bmi_status = BMI_SUCCESS
     case('soil_moist_tot')
         size = sizeof(this%model%model_simulation%soil%soil_moist_tot)
@@ -1230,66 +1212,68 @@
     end select
     end function prms_set_double
     
-    !! Set integer values at particular locations.
-    !function prms_set_at_indices_int(this, name, indices, src) &
-    !     result (bmi_status)
-    !  class (bmi_prms_soil), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(in) :: indices(:)
-    !  integer, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) dest
-    !  integer, pointer :: dest_flattened(:)
-    !  integer :: i
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_at_indices_int
-    !
-    !! Set real values at particular locations.
-    !function prms_set_at_indices_float(this, name, indices, src) &
-    !     result (bmi_status)
-    !  class (bmi_prms_soil), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(in) :: indices(:)
-    !  real, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) dest
-    !  real, pointer :: dest_flattened(:)
-    !  integer :: i
-    !
-    !  select case(name)
-    !  case("plate_soil__temperature")
-    !     dest = c_loc(this%model%temperature(1,1))
-    !     call c_f_pointer(dest, dest_flattened, [this%model%n_y * this%model%n_x])
-    !     do i = 1, size(indices)
-    !        dest_flattened(indices(i)) = src(i)
-    !     end do
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_at_indices_float
-    !
-    !! Set double values at particular locations.
-    !function prms_set_at_indices_double(this, name, indices, src) &
-    !     result (bmi_status)
-    !  class (bmi_prms_soil), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(in) :: indices(:)
-    !  double precision, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) dest
-    !  double precision, pointer :: dest_flattened(:)
-    !  integer :: i
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_at_indices_double
+    ! Set integer values at particular locations.
+    function prms_set_at_indices_int(this, name, inds, src) &
+        result (bmi_status)
+    class (bmi_prms_soil), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(in) :: inds(:)
+    integer, intent(in) :: src(:)
+    integer :: bmi_status
+    type (c_ptr) dest
+    integer, pointer :: dest_flattened(:)
+    integer :: i
+    
+      select case(name)
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_set_at_indices_int
+    
+    ! Set real values at particular locations.
+    function prms_set_at_indices_float(this, name, inds, src) &
+        result (bmi_status)
+    class (bmi_prms_soil), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(in) :: inds(:)
+    real, intent(in) :: src(:)
+    integer :: bmi_status
+    type (c_ptr) dest
+    real, pointer :: dest_flattened(:)
+    integer :: i, n_elements, status, gridid
+    
+      select case(name)
+      !case("plate_soil__temperature")
+      !   dest = c_loc(this%model%temperature(1,1))
+      !   call c_f_pointer(dest, dest_flattened, [this%model%n_y * this%model%n_x])
+      !   do i = 1, size(indices)
+      !      dest_flattened(indices(i)) = src(i)
+      !   end do
+      !   bmi_status = BMI_SUCCESS
+      case default
+
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_set_at_indices_float
+    
+    ! Set double values at particular locations.
+    function prms_set_at_indices_double(this, name, inds, src) &
+        result (bmi_status)
+    class (bmi_prms_soil), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(in) :: inds(:)
+    double precision, intent(in) :: src(:)
+    integer :: bmi_status
+    type (c_ptr) dest
+    double precision, pointer :: dest_flattened(:)
+    integer :: i, n_elements, status, gridid
+    
+      select case(name)
+
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_set_at_indices_double
     !
     !! A non-BMI procedure for model introspection.
     !subroutine print_model_info(this)
