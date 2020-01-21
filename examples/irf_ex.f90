@@ -46,10 +46,10 @@ program irf_test
         integer :: gridid1,gridid2, nelem, nelem1, nelem2
         
         !double precision
-        nelem  = getvarsize(msurf, msoil, 'basin_sroff')
-        call allocr64var(r64var, nelem)
-        code = msoil%get_value('basin_sroff', r64var)
-        code = msurf%set_value('basin_sroff', r64var)
+        !nelem  = getvarsize(msurf, msoil, 'basin_sroff')
+        !call allocr64var(r64var, nelem)
+        !code = msoil%get_value('basin_sroff', r64var)
+        !code = msurf%set_value('basin_sroff', r64var)
         
         !nelem  = getvarsize(msurf, msoil, 'dprst_seep_hru')
         !call allocr64var(r64var, nelem)
@@ -61,10 +61,10 @@ program irf_test
         !code = msoil%get_value('strm_seg_in', r64var)
         !code = msurf%set_value('strm_seg_in', r64var)
         !
-        nelem  = getvarsize(msurf, msoil, 'basin_potet')
-        call allocr64var(r64var, nelem)
-        code = msoil%get_value('basin_potet', r64var)
-        code = msurf%set_value('basin_potet', r64var)
+        !nelem  = getvarsize(msurf, msoil, 'basin_potet')
+        !call allocr64var(r64var, nelem)
+        !code = msoil%get_value('basin_potet', r64var)
+        !code = msurf%set_value('basin_potet', r64var)
 
         !reals
 
@@ -145,15 +145,15 @@ program irf_test
         integer :: code
         integer :: gridid1,gridid2, nelem, nelem1, nelem2
 
-        nelem  = getvarsize(msurf, msoil, 'basin_potet')
-        call allocr64var(r64var, nelem)
-        code = msurf%get_value('basin_potet', r64var)
-        code = msoil%set_value('basin_potet', r64var)
+        !nelem  = getvarsize(msurf, msoil, 'basin_potet')
+        !call allocr64var(r64var, nelem)
+        !code = msurf%get_value('basin_potet', r64var)
+        !code = msoil%set_value('basin_potet', r64var)
         
-        nelem  = getvarsize(msurf, msoil, 'basin_sroff')
-        call allocr64var(r64var, nelem)
-        code = msurf%get_value('basin_sroff', r64var)
-        code = msoil%set_value('basin_sroff', r64var)
+        !nelem  = getvarsize(msurf, msoil, 'basin_sroff')
+        !call allocr64var(r64var, nelem)
+        !code = msurf%get_value('basin_sroff', r64var)
+        !code = msoil%set_value('basin_sroff', r64var)
 
         nelem  = getvarsize(msurf, msoil, 'hru_ppt')
         call allocr32var(r32var, nelem)
