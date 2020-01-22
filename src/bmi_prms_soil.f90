@@ -83,12 +83,12 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 24
+    integer, parameter :: input_item_count = 35
     integer, parameter :: output_item_count = 9
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
-
+        !values below are required by soilzone module ffrom the surface zone
         !runoff
         'basin_sroff', & !r64
         'dprst_evap_hru', & !r32 by nhru
@@ -127,7 +127,21 @@
         'soil_rechr', & !r64 by nhru
         'soil_rechr_max', & !r32 by nhru
         'soil_moist', & !r32 by nhru
-        'soil_moist_max' &  !r32 by nhru
+        'soil_moist_max', &  !r32 by nhru
+        !###################################################!
+        ! first cut at                                      !
+        !other values that could be used during calibration !
+        'pref_flow_den', & !r32 by nhru
+        'pref_flow_max', & !r32 by nhru
+        'pref_flow_thrsh', & !r32 by nhru
+        'soil2gw_max', & !r32 by nhru
+        'ssr2gw_exp', & !r32 by nhru
+        'ssr2gw_rate', & !r32 by nhru
+        'sat_threshold', & !r32 by nhru
+        'slowcoef_lin', & !r32 by nhru
+        'slowcoef_sq', & !r32 by nhru
+        'fastcoef_lin', & !r32 by nhru
+        'fastcoef_sq' & !r32 by nhru
         /)
         
     character (len=BMI_MAX_VAR_NAME), target, &
@@ -338,7 +352,10 @@
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         
             !soil (this)
-        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
+        'pref_flow_den', 'pref_flow_max', 'pref_flow_thrsh', 'soil2gw_max', & 
+        'ssr2gw_exp',  'ssr2gw_rate', 'sat_threshold',  'slowcoef_lin', & 
+        'slowcoef_sq',  'fastcoef_lin', 'fastcoef_sq')
         grid = 0
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
@@ -554,7 +571,10 @@
         
         
             !soil (this)
-        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
+        'pref_flow_den', 'pref_flow_max', 'pref_flow_thrsh', 'soil2gw_max', & 
+        'ssr2gw_exp',  'ssr2gw_rate', 'sat_threshold',  'slowcoef_lin', & 
+        'slowcoef_sq',  'fastcoef_lin', 'fastcoef_sq')
         type = "real"
         bmi_status = BMI_SUCCESS
     case( 'soil_rechr', 'basin_potet','basin_sroff', &
@@ -604,7 +624,8 @@
         'basin_potet', &
         
         !soil (this)
-        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow')
+        'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
+        'pref_flow_max', 'pref_flow_thrsh')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
@@ -699,6 +720,8 @@
     case('hru_frac_perv')
         size = sizeof(this%model%model_simulation%runoff%hru_frac_perv)
         bmi_status = BMI_SUCCESS
+
+        !soilzone vars
     case('soil_moist_tot')
         size = sizeof(this%model%model_simulation%soil%soil_moist_tot)
         bmi_status = BMI_SUCCESS
@@ -710,6 +733,39 @@
         bmi_status = BMI_SUCCESS
     case('ssres_flow')
         size = sizeof(this%model%model_simulation%soil%ssres_flow)
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_den')
+        size = sizeof(this%model%model_simulation%soil%pref_flow_den)
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_max')
+        size = sizeof(this%model%model_simulation%soil%pref_flow_max)
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_thrsh')
+        size = sizeof(this%model%model_simulation%soil%pref_flow_thrsh)
+        bmi_status = BMI_SUCCESS
+    case('soil2gw_max')
+        size = sizeof(this%model%model_simulation%soil%soil2gw_max)
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_exp')
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_exp)
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_rate')
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_rate)
+        bmi_status = BMI_SUCCESS
+    case('sat_threshold')
+        size = sizeof(this%model%model_simulation%soil%sat_threshold)
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_lin')
+        size = sizeof(this%model%model_simulation%soil%slowcoef_lin)
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_sq')
+        size = sizeof(this%model%model_simulation%soil%slowcoef_sq)
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_lin')
+        size = sizeof(this%model%model_simulation%soil%fastcoef_lin)
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_sq')
+        size = sizeof(this%model%model_simulation%soil%fastcoef_sq)
         bmi_status = BMI_SUCCESS
     case default
         size = -1
@@ -1182,6 +1238,40 @@
     case('hru_frac_perv')
         this%model%model_simulation%runoff%hru_frac_perv = src
         bmi_status = BMI_SUCCESS
+    case('pref_flow_den')
+        this%model%model_simulation%soil%pref_flow_den = src
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_max')
+        this%model%model_simulation%soil%pref_flow_max = src
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_thrsh')
+        this%model%model_simulation%soil%pref_flow_thrsh = src
+        bmi_status = BMI_SUCCESS
+    case('soil2gw_max')
+        this%model%model_simulation%soil%soil2gw_max = src
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_exp')
+        this%model%model_simulation%soil%ssr2gw_exp = src
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_rate')
+        this%model%model_simulation%soil%ssr2gw_rate = src
+        bmi_status = BMI_SUCCESS
+    case('sat_threshold')
+        this%model%model_simulation%soil%sat_threshold = src
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_lin')
+        this%model%model_simulation%soil%slowcoef_lin = src
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_sq')
+        this%model%model_simulation%soil%slowcoef_sq = src
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_lin')
+        this%model%model_simulation%soil%fastcoef_lin = src
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_sq')
+        this%model%model_simulation%soil%fastcoef_sq = src
+        bmi_status = BMI_SUCCESS
+
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -1241,7 +1331,10 @@
     type (c_ptr) dest
     real, pointer :: dest_flattened(:)
     integer :: i, n_elements, status, gridid
-    
+   
+    status = this%get_var_grid(name, gridid)
+    status = this%get_grid_size(gridid, n_elements)
+
       select case(name)
       !case("plate_soil__temperature")
       !   dest = c_loc(this%model%temperature(1,1))
@@ -1250,6 +1343,84 @@
       !      dest_flattened(indices(i)) = src(i)
       !   end do
       !   bmi_status = BMI_SUCCESS
+    case('pref_flow_den')
+        dest = c_loc(this%model%model_simulation%soil%pref_flow_den(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_max')
+        dest = c_loc(this%model%model_simulation%soil%pref_flow_max(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_thrsh')
+       dest = c_loc( this%model%model_simulation%soil%pref_flow_thrsh(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('soil2gw_max')
+       dest = c_loc(this%model%model_simulation%soil%soil2gw_max(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_exp')
+        dest = c_loc(this%model%model_simulation%soil%ssr2gw_exp(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_rate')
+        dest = c_loc(this%model%model_simulation%soil%ssr2gw_rate(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('sat_threshold')
+        dest = c_loc(this%model%model_simulation%soil%sat_threshold(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_lin')
+        dest = c_loc(this%model%model_simulation%soil%slowcoef_lin(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_sq')
+        dest = c_loc(this%model%model_simulation%soil%slowcoef_sq(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_lin')
+        dest = c_loc(this%model%model_simulation%soil%fastcoef_lin(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_sq')
+        dest = c_loc(this%model%model_simulation%soil%fastcoef_sq(1))
+        call c_f_pointer(dest, dest_flattened, [n_elements])
+        do i = 1, size(inds)
+            dest_flattened(inds(i)) = src(i)
+        end do
+        bmi_status = BMI_SUCCESS
+
       case default
 
          bmi_status = BMI_FAILURE
