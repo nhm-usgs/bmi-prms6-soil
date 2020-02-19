@@ -750,131 +750,131 @@
         size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg(1))
         bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
-        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru)
+        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        size = sizeof(this%model%model_simulation%runoff%strm_seg_in)
+        size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
         bmi_status = BMI_SUCCESS
     case('hru_frac_perv')
-        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv)
+        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
         bmi_status = BMI_SUCCESS
 
         !soilzone vars
     case('soil_moist_tot')
-        size = sizeof(this%model%model_simulation%soil%soil_moist_tot)
+        size = sizeof(this%model%model_simulation%soil%soil_moist_tot(1))
         bmi_status = BMI_SUCCESS
     case('soil_to_gw')
-        size = sizeof(this%model%model_simulation%soil%soil_to_gw)
+        size = sizeof(this%model%model_simulation%soil%soil_to_gw(1))
         bmi_status = BMI_SUCCESS
     case('ssr_to_gw')
-        size = sizeof(this%model%model_simulation%soil%ssr_to_gw)
+        size = sizeof(this%model%model_simulation%soil%ssr_to_gw(1))
         bmi_status = BMI_SUCCESS
     case('ssres_flow')
-        size = sizeof(this%model%model_simulation%soil%ssres_flow)
+        size = sizeof(this%model%model_simulation%soil%ssres_flow(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_den')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_den)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_den(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_max')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_max)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_max(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_thrsh')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_thrsh)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_thrsh(1))
         bmi_status = BMI_SUCCESS
     case('soil2gw_max')
-        size = sizeof(this%model%model_simulation%soil%soil2gw_max)
+        size = sizeof(this%model%model_simulation%soil%soil2gw_max(1))
         bmi_status = BMI_SUCCESS
     case('ssr2gw_exp')
-        size = sizeof(this%model%model_simulation%soil%ssr2gw_exp)
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_exp(1))
         bmi_status = BMI_SUCCESS
     case('ssr2gw_rate')
-        size = sizeof(this%model%model_simulation%soil%ssr2gw_rate)
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_rate(1))
         bmi_status = BMI_SUCCESS
     case('sat_threshold')
-        size = sizeof(this%model%model_simulation%soil%sat_threshold)
+        size = sizeof(this%model%model_simulation%soil%sat_threshold(1))
         bmi_status = BMI_SUCCESS
     case('slowcoef_lin')
-        size = sizeof(this%model%model_simulation%soil%slowcoef_lin)
+        size = sizeof(this%model%model_simulation%soil%slowcoef_lin(1))
         bmi_status = BMI_SUCCESS
     case('slowcoef_sq')
-        size = sizeof(this%model%model_simulation%soil%slowcoef_sq)
+        size = sizeof(this%model%model_simulation%soil%slowcoef_sq(1))
         bmi_status = BMI_SUCCESS
     case('fastcoef_lin')
-        size = sizeof(this%model%model_simulation%soil%fastcoef_lin)
+        size = sizeof(this%model%model_simulation%soil%fastcoef_lin(1))
         bmi_status = BMI_SUCCESS
     case('fastcoef_sq')
-        size = sizeof(this%model%model_simulation%soil%fastcoef_sq)
+        size = sizeof(this%model%model_simulation%soil%fastcoef_sq(1))
         bmi_status = BMI_SUCCESS
         
     case('cap_infil_tot')
-       size = sizeof(this%model%model_simulation%soil%cap_infil_tot)
+       size = sizeof(this%model%model_simulation%soil%cap_infil_tot(1))
         bmi_status = BMI_SUCCESS
     case('cap_waterin')
-        size = sizeof(this%model%model_simulation%soil%cap_waterin)
+        size = sizeof(this%model%model_simulation%soil%cap_waterin(1))
         bmi_status = BMI_SUCCESS
     case('dunnian_flow') 
-       size = sizeof(this%model%model_simulation%soil%dunnian_flow)
+       size = sizeof(this%model%model_simulation%soil%dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     !case('hru_sz_cascade_flow')
-    !    dest = [this%model%model_simulation%soil%hru_sz_cascade_flow]
+    !    dest = [this%model%model_simulation%soil%hru_sz_cascade_flow] !dim by 1
     !    bmi_status = BMI_SUCCESS
     case('perv_actet')
-        size = sizeof(this%model%model_simulation%soil%perv_actet)
+        size = sizeof(this%model%model_simulation%soil%perv_actet(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_infil')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_infil)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_infil(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_stor')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_stor)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_stor(1))
         bmi_status = BMI_SUCCESS
     case('soil_lower')
-        size = sizeof(this%model%model_simulation%soil%soil_lower)
+        size = sizeof(this%model%model_simulation%soil%soil_lower(1))
         bmi_status = BMI_SUCCESS
     case('soil_moist_ante') 
-        size = sizeof(this%model%model_simulation%soil%soil_moist_ante)
+        size = sizeof(this%model%model_simulation%soil%soil_moist_ante(1))
         bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
-        size = sizeof(this%model%model_simulation%soil%soil_to_ssr)
+        size = sizeof(this%model%model_simulation%soil%soil_to_ssr(1))
         bmi_status = BMI_SUCCESS
     case('ssres_in')
-        size = sizeof(this%model%model_simulation%soil%ssres_in)
+        size = sizeof(this%model%model_simulation%soil%ssres_in(1))
         bmi_status = BMI_SUCCESS
     case('ssres_stor_ante')
-        size = sizeof(this%model%model_simulation%soil%ssres_stor_ante)
+        size = sizeof(this%model%model_simulation%soil%ssres_stor_ante(1))
         bmi_status = BMI_SUCCESS
     case('swale_actet')
-        size = sizeof(this%model%model_simulation%soil%swale_actet)
+        size = sizeof(this%model%model_simulation%soil%swale_actet(1))
         bmi_status = BMI_SUCCESS
     case('hru_actet')
-        size = sizeof(this%model%model_simulation%soil%hru_actet)
+        size = sizeof(this%model%model_simulation%soil%hru_actet(1))
         bmi_status = BMI_SUCCESS
     case('ssres_stor')
-        size = sizeof(this%model%model_simulation%soil%ssres_stor)
+        size = sizeof(this%model%model_simulation%soil%ssres_stor(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow')
-        size = sizeof(this%model%model_simulation%soil%pref_flow)
+        size = sizeof(this%model%model_simulation%soil%pref_flow(1))
         bmi_status = BMI_SUCCESS
     case('slow_flow')
-        size = sizeof(this%model%model_simulation%soil%slow_flow)
+        size = sizeof(this%model%model_simulation%soil%slow_flow(1))
         bmi_status = BMI_SUCCESS
     case('slow_stor')
-        size = sizeof(this%model%model_simulation%soil%slow_stor)
+        size = sizeof(this%model%model_simulation%soil%slow_stor(1))
         bmi_status = BMI_SUCCESS
 
     case('grav_dunnian_flow')
-        size = sizeof(this%model%model_simulation%soil%grav_dunnian_flow)
+        size = sizeof(this%model%model_simulation%soil%grav_dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     case('gvr2pfr')
-        size = sizeof(this%model%model_simulation%soil%gvr2pfr)
+        size = sizeof(this%model%model_simulation%soil%gvr2pfr(1))
         bmi_status = BMI_SUCCESS
     case('pfr_dunnian_flow')
-        size = sizeof(this%model%model_simulation%soil%pfr_dunnian_flow)
+        size = sizeof(this%model%model_simulation%soil%pfr_dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     case('upslope_dunnianflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow)
+        size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow(1))
         bmi_status = BMI_SUCCESS
     case('upslope_interflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_interflow)
+        size = sizeof(this%model%model_simulation%soil%upslope_interflow(1))
         bmi_status = BMI_SUCCESS
 
     case default
