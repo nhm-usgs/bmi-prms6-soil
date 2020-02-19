@@ -90,107 +90,107 @@
         input_items = (/&
         !values below are required by soilzone module ffrom the surface zone
         !runoff
-        'dprst_evap_hru', & !r32 by nhru
-        'dprst_seep_hru', & !r64 by nhru
-        'hru_area_perv', & !r32 by nhru
-        'hru_frac_perv', & !r32 by nhru
-        'hru_impervevap', & !r32 by nhru
+        'dprst_evap_hru      ', & !r32 by nhru
+        'dprst_seep_hru      ', & !r64 by nhru
+        'hru_area_perv       ', & !r32 by nhru
+        'hru_frac_perv       ', & !r32 by nhru
+        'hru_impervevap      ', & !r32 by nhru
         'infil', & !r32 by nhru
-        'soil_moist_chg', & !r32 by nhru
-        'soil_rechr_chg', & !r32 by nhru
-        'sroff', & !r32 by nhru
+        'soil_moist_chg      ', & !r32 by nhru
+        'soil_rechr_chg      ', & !r32 by nhru
+        'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        'strm_seg_in', & !r64 by nsegment
+        'strm_seg_in         ', & !r64 by nsegment
         
         !potet
-        'potet', & !r32 by nhru
+        'potet               ', & !r32 by nhru
 
         !prsm_time
-        'nowtime', & !i32(6)
+        'nowtime             ', & !i32(6)
 
         !precipitation
-        'hru_ppt', & !r32 by nhru
+        'hru_ppt             ', & !r32 by nhru
         
         !transpiration
-        'transp_on', & !logical by nhru
+        'transp_on           ', & !logical by nhru
 
         !intcp
-        'hru_intcpevap', &  !r32 by nhru
+        'hru_intcpevap       ', &  !r32 by nhru
 
         !snow
-        'snow_evap', & !r32 by nhru
-        'snowcov_area', & !r32 by nhru
+        'snow_evap           ', & !r32 by nhru
+        'snowcov_area        ', & !r32 by nhru
 
         !climate
-        'soil_rechr', & !r64 by nhru
-        'soil_rechr_max', & !r32 by nhru
-        'soil_moist', & !r32 by nhru
-        'soil_moist_max', &  !r32 by nhru
+        'soil_rechr          ', & !r64 by nhru
+        'soil_rechr_max      ', & !r32 by nhru
+        'soil_moist          ', & !r32 by nhru
+        'soil_moist_max      ', &  !r32 by nhru
         !###################################################!
         ! first cut at                                      !
         !other values that could be used during calibration !
         !these are soilzone vars                            !
     
-        'pref_flow_den', & !r32 by nhru
-        'pref_flow_max', & !r32 by nhru
-        'pref_flow_thrsh', & !r32 by nhru
-        'soil2gw_max', & !r32 by nhru
-        'ssr2gw_exp', & !r32 by nhru
-        'ssr2gw_rate', & !r32 by nhru
-        'sat_threshold', & !r32 by nhru
-        'slowcoef_lin', & !r32 by nhru
-        'slowcoef_sq', & !r32 by nhru
-        'fastcoef_lin', & !r32 by nhru
-        'fastcoef_sq' & !r32 by nhru
+        'pref_flow_den       ', & !r32 by nhru
+        'pref_flow_max       ', & !r32 by nhru
+        'pref_flow_thrsh     ', & !r32 by nhru
+        'soil2gw_max         ', & !r32 by nhru
+        'ssr2gw_exp          ', & !r32 by nhru
+        'ssr2gw_rate         ', & !r32 by nhru
+        'sat_threshold       ', & !r32 by nhru
+        'slowcoef_lin        ', & !r32 by nhru
+        'slowcoef_sq         ', & !r32 by nhru
+        'fastcoef_lin        ', & !r32 by nhru
+        'fastcoef_sq         ' & !r32 by nhru
         /)
         
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
         output_items = (/ &
         !soil module
-        'soil_moist_tot', & !r32 by nhru transfer to gw
-        'soil_to_gw', & !r32 by nhru transfer to gw
-        'ssr_to_gw', & !r32 by nhru transfer to gw
-        'ssres_flow', & !r32 by nhru transfer to gw and streamflow
+        'soil_moist_tot      ', & !r32 by nhru transfer to gw
+        'soil_to_gw          ', & !r32 by nhru transfer to gw
+        'ssr_to_gw           ', & !r32 by nhru transfer to gw
+        'ssres_flow          ', & !r32 by nhru transfer to gw and streamflow
         !soilzone vars used in water-balance
-        'cap_infil_tot', & !r32 by nhru
-        'cap_waterin', & !r32 by nhru
-        'dunnian_flow', & !r32 by nhru
-        'grav_dunnian_flow', & !r32 by nhru
-        'gvr2pfr', & !r32 by nhru
+        'cap_infil_tot       ', & !r32 by nhru
+        'cap_waterin         ', & !r32 by nhru
+        'dunnian_flow        ', & !r32 by nhru
+        'grav_dunnian_flow   ', & !r32 by nhru
+        'gvr2pfr             ', & !r32 by nhru
         !'hru_sz_cascade_flow', & !r32 by nhru
-        'perv_actet', & !r32 by nhru
-        'pref_flow_den', & !r32 by nhru
-        'pref_flow_infil', & !r32 by nhru
-        'pref_flow_max', & !r32 by nhru
-        'pref_flow_stor', & !r32 by nhru
-        'pref_flow_thrsh', & !r32 by nhru
-        'soil_lower', & !r32 by nhru
-        'soil_moist_ante', & !r32 by nhru
-        'soil_to_ssr', & !r32 by nhru
-        'ssres_in', & !r32 by nhru
-        'ssres_stor_ante', & !r32 by nhru
-        'swale_actet', & !r32 by nhru
-        'upslope_dunnianflow', &!r64 by nhru
-        'upslope_interflow', & !r64 by nhru
-        'pfr_dunnian_flow', & !r64 by nhru
-        'last_soil_moist',& !r64 by 1
-        'last_ssstor', & !r64 by 1
+        'perv_actet          ', & !r32 by nhru
+        'pref_flow_den       ', & !r32 by nhru
+        'pref_flow_infil     ', & !r32 by nhru
+        'pref_flow_max       ', & !r32 by nhru
+        'pref_flow_stor      ', & !r32 by nhru
+        'pref_flow_thrsh     ', & !r32 by nhru
+        'soil_lower          ', & !r32 by nhru
+        'soil_moist_ante     ', & !r32 by nhru
+        'soil_to_ssr         ', & !r32 by nhru
+        'ssres_in            ', & !r32 by nhru
+        'ssres_stor_ante     ', & !r32 by nhru
+        'swale_actet         ', & !r32 by nhru
+        'upslope_dunnianflow ', &!r64 by nhru
+        'upslope_interflow   ', & !r64 by nhru
+        'pfr_dunnian_flow    ', & !r64 by nhru
+        'last_soil_moist     ',& !r64 by 1
+        'last_ssstor         ', & !r64 by 1
         !soilzone water-balance and pot calibratoin target
-        'hru_actet', & !r32 by nhru
-        'ssres_stor', & !r32 by nhru
-        'pref_flow', & !r32 by nhru
-        'slow_flow', & !r32 by nhru
-        'slow_stor', & !r32 by nhru
+        'hru_actet           ', & !r32 by nhru
+        'ssres_stor          ', & !r32 by nhru
+        'pref_flow           ', & !r32 by nhru
+        'slow_flow           ', & !r32 by nhru
+        'slow_stor           ', & !r32 by nhru
         
         !climate
-        'soil_moist', & !r32 by nhru transfer to surface
-        'soil_rechr', & !r32 by nhru transfer to surface
+        'soil_moist          ', & !r32 by nhru transfer to surface
+        'soil_rechr          ', & !r32 by nhru transfer to surface
         
         !runoff
-        'infil', & !r32 by nhru transfer to surface
-        'sroff', & !r32 by nhru transfer to surface
-        'strm_seg_in' & !r64 by nhru transfer to surface
+        'infil               ', & !r32 by nhru transfer to surface
+        'sroff               ', & !r32 by nhru transfer to surface
+        'strm_seg_in         ' & !r64 by nhru transfer to surface
         /)
 
     contains
