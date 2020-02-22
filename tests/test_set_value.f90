@@ -2,11 +2,10 @@ program test_set_value
 
     use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
     use bmiprmssoil
-    use fixtures, only: status, print_1darray, print_i_1darray, &
-        isreal4equalreal4
+    use fixtures, only: config_file, status, print_1darray, isReal4EqualReal4, &
+        isReal8EqualReal8, print_i_1darray, print_array, isintEqualint
   implicit none
 
-    character (len=*), parameter :: config_file = "control.simple1"
     type (bmi_prms_soil) :: m
     integer :: retcode
 

@@ -95,7 +95,7 @@
         'hru_area_perv       ', & !r32 by nhru
         'hru_frac_perv       ', & !r32 by nhru
         'hru_impervevap      ', & !r32 by nhru
-        'infil', & !r32 by nhru
+        'infil               ', & !r32 by nhru
         'soil_moist_chg      ', & !r32 by nhru
         'soil_rechr_chg      ', & !r32 by nhru
         'sroff               ', & !r32 by nhru
