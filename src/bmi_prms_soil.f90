@@ -83,116 +83,134 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 35
-    integer, parameter :: output_item_count = 36
+    integer, parameter :: input_item_count = 33
+    integer, parameter :: output_item_count = 49
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
         !values below are required by soilzone module ffrom the surface zone
         !runoff
-        'basin_sroff', & !r64
-        'dprst_evap_hru', & !r32 by nhru
-        'dprst_seep_hru', & !r64 by nhru
-        'hru_area_perv', & !r32 by nhru
-        'hru_frac_perv', & !r32 by nhru
-        'hru_impervevap', & !r32 by nhru
-        'infil', & !r32 by nhru
-        'soil_moist_chg', & !r32 by nhru
-        'soil_rechr_chg', & !r32 by nhru
-        'sroff', & !r32 by nhru
+        'dprst_evap_hru      ', & !r32 by nhru
+        'dprst_seep_hru      ', & !r64 by nhru
+        'hru_area_perv       ', & !r32 by nhru
+        'hru_frac_perv       ', & !r32 by nhru
+        'hru_impervevap      ', & !r32 by nhru
+        'infil               ', & !r32 by nhru
+        'soil_moist_chg      ', & !r32 by nhru
+        'soil_rechr_chg      ', & !r32 by nhru
+        'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        'strm_seg_in', & !r64 by nsegment
+        'strm_seg_in         ', & !r64 by nsegment
         
         !potet
-        'basin_potet', & !r64
-        'potet', & !r32 by nhru
+        'potet               ', & !r32 by nhru
 
         !prsm_time
-        'nowtime', & !i32(6)
+        'nowtime             ', & !i32(6)
 
         !precipitation
-        'hru_ppt', & !r32 by nhru
+        'hru_ppt             ', & !r32 by nhru
         
         !transpiration
-        'transp_on', & !logical by nhru
+        'transp_on           ', & !logical by nhru
 
         !intcp
-        'hru_intcpevap', &  !r32 by nhru
+        'hru_intcpevap       ', &  !r32 by nhru
 
         !snow
-        'snow_evap', & !r32 by nhru
-        'snowcov_area', & !r32 by nhru
+        'snow_evap           ', & !r32 by nhru
+        'snowcov_area        ', & !r32 by nhru
 
         !climate
-        'soil_rechr', & !r64 by nhru
-        'soil_rechr_max', & !r32 by nhru
-        'soil_moist', & !r32 by nhru
-        'soil_moist_max', &  !r32 by nhru
+        'soil_rechr          ', & !r64 by nhru
+        'soil_rechr_max      ', & !r32 by nhru and calibration
+        'soil_moist          ', & !r32 by nhru
+        'soil_moist_max      ', &  !r32 by nhru and calibration
         !###################################################!
         ! first cut at                                      !
         !other values that could be used during calibration !
         !these are soilzone vars                            !
     
-        'pref_flow_den', & !r32 by nhru
-        'pref_flow_max', & !r32 by nhru
-        'pref_flow_thrsh', & !r32 by nhru
-        'soil2gw_max', & !r32 by nhru
-        'ssr2gw_exp', & !r32 by nhru
-        'ssr2gw_rate', & !r32 by nhru
-        'sat_threshold', & !r32 by nhru
-        'slowcoef_lin', & !r32 by nhru
-        'slowcoef_sq', & !r32 by nhru
-        'fastcoef_lin', & !r32 by nhru
-        'fastcoef_sq' & !r32 by nhru
+        'pref_flow_den       ', & !r32 by nhru
+        'pref_flow_max       ', & !r32 by nhru
+        'pref_flow_thrsh     ', & !r32 by nhru
+        'soil2gw_max         ', & !r32 by nhru
+        'ssr2gw_exp          ', & !r32 by nhru
+        'ssr2gw_rate         ', & !r32 by nhru
+        'sat_threshold       ', & !r32 by nhru
+        'slowcoef_lin        ', & !r32 by nhru
+        'slowcoef_sq         ', & !r32 by nhru
+        'fastcoef_lin        ', & !r32 by nhru
+        'fastcoef_sq         ' & !r32 by nhru
         /)
         
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
         output_items = (/ &
         !soil module
-        'soil_moist_tot', & !r32 by nhru transfer to gw
-        'soil_to_gw', & !r32 by nhru transfer to gw
-        'ssr_to_gw', & !r32 by nhru transfer to gw
-        'ssres_flow', & !r32 by nhru transfer to gw and streamflow
+        'soil_moist_tot      ', & !r32 by nhru transfer to gw
+        'soil_to_gw          ', & !r32 by nhru transfer to gw
+        'ssr_to_gw           ', & !r32 by nhru transfer to gw
+        'ssres_flow          ', & !r32 by nhru transfer to gw and streamflow
         !soilzone vars used in water-balance
-        'cap_infil_tot', & !r32 by nhru
-        'cap_waterin', & !r32 by nhru
-        'dunnian_flow', & !r32 by nhru
-        'grav_dunnian_flow', & !r32 by nhru
-        'gvr2pfr', & !r32 by nhru
+        'cap_infil_tot       ', & !r32 by nhru
+        'cap_waterin         ', & !r32 by nhru
+        'dunnian_flow        ', & !r32 by nhru
+        'grav_dunnian_flow   ', & !r32 by nhru
+        'gvr2pfr             ', & !r32 by nhru
         !'hru_sz_cascade_flow', & !r32 by nhru
-        'perv_actet', & !r32 by nhru
-        'pref_flow_den', & !r32 by nhru
-        'pref_flow_infil', & !r32 by nhru
-        'pref_flow_max', & !r32 by nhru
-        'pref_flow_stor', & !r32 by nhru
-        'pref_flow_thrsh', & !r32 by nhru
-        'soil_lower', & !r32 by nhru
-        'soil_moist_ante', & !r32 by nhru
-        'soil_to_ssr', & !r32 by nhru
-        'ssres_in', & !r32 by nhru
-        'ssres_stor_ante', & !r32 by nhru
-        'swale_actet', & !r32 by nhru
-        'upslope_dunnianflow', &!r64 by nhru
-        'upslope_interflow', & !r64 by nhru
-        'pfr_dunnian_flow', & !r64 by nhru
-        'last_soil_moist',& !r64 by 1
-        'last_ssstor', & !r64 by 1
+        'perv_actet          ', & !r32 by nhru
+        'pref_flow_den       ', & !r32 by nhru
+        'pref_flow_infil     ', & !r32 by nhru
+        'pref_flow_max       ', & !r32 by nhru
+        'pref_flow_stor      ', & !r32 by nhru
+        'pref_flow_thrsh     ', & !r32 by nhru
+        'soil_lower          ', & !r32 by nhru
+        'soil_moist_ante     ', & !r32 by nhru
+        'soil_to_ssr         ', & !r32 by nhru
+        'ssres_in            ', & !r32 by nhru
+        'ssres_stor_ante     ', & !r32 by nhru
+        'swale_actet         ', & !r32 by nhru
+        'upslope_dunnianflow ', &!r64 by nhru
+        'upslope_interflow   ', & !r64 by nhru
+        'pfr_dunnian_flow    ', & !r64 by nhru
+        'last_soil_moist     ',& !r64 by 1
+        'last_ssstor         ', & !r64 by 1
         !soilzone water-balance and pot calibratoin target
-        'hru_actet', & !r32 by nhru
-        'ssres_stor', & !r32 by nhru
-        'pref_flow', & !r32 by nhru
-        'slow_flow', & !r32 by nhru
-        'slow_stor', & !r32 by nhru
+        'hru_actet           ', & !r32 by nhru
+        'ssres_stor          ', & !r32 by nhru
+        'pref_flow           ', & !r32 by nhru
+        'slow_flow           ', & !r32 by nhru
+        'slow_stor           ', & !r32 by nhru
         
         !climate
-        'soil_moist', & !r32 by nhru transfer to surface
-        'soil_rechr', & !r32 by nhru transfer to surface
+        'soil_moist          ', & !r32 by nhru transfer to surface
+        'soil_rechr          ', & !r32 by nhru transfer to surface
         
         !runoff
-        'infil', & !r32 by nhru transfer to surface
-        'sroff', & !r32 by nhru transfer to surface
-        'strm_seg_in' & !r64 by nhru transfer to surface
+        'infil               ', & !r32 by nhru transfer to surface
+        'sroff               ', & !r32 by nhru transfer to surface
+        'strm_seg_in         ', & !r64 by nhru transfer to surface
+        
+    !###################################################!
+        ! first cut at                                      !
+        !other values that could be used during calibration !
+        !these are soilzone vars                            !
+        !climate
+        'soil_rechr_max      ', & !r32 by nhru 
+        'soil_moist_max      ', &!r32 by nhru 
+        !soil
+        'pref_flow_den       ', & !r32 by nhru
+        'pref_flow_max       ', & !r32 by nhru
+        'pref_flow_thrsh     ', & !r32 by nhru
+        'soil2gw_max         ', & !r32 by nhru
+        'ssr2gw_exp          ', & !r32 by nhru
+        'ssr2gw_rate         ', & !r32 by nhru
+        'sat_threshold       ', & !r32 by nhru
+        'slowcoef_lin        ', & !r32 by nhru
+        'slowcoef_sq         ', & !r32 by nhru
+        'fastcoef_lin        ', & !r32 by nhru
+        'fastcoef_sq         ' & !r32 by nhru
         /)
 
     contains
@@ -398,7 +416,7 @@
     case('strm_seg_in')
         grid = 1
         bmi_status = BMI_SUCCESS
-    case('basin_potet', 'srunoff_updated_soil', 'last_soil_moist', & 
+    case('srunoff_updated_soil', 'last_soil_moist', & 
         'last_ssstor')
         grid = 2
         bmi_status = BMI_SUCCESS
@@ -623,7 +641,7 @@
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         type = "real"
         bmi_status = BMI_SUCCESS
-        case( 'soil_rechr', 'basin_potet','basin_sroff', &
+        case( 'soil_rechr', &
         'dprst_seep_hru', 'strm_seg_in', 'grav_dunnian_flow', 'gvr2pfr', &
         'prf_dunnian_flow', 'upslope_dunnian_flow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
@@ -655,7 +673,6 @@
         
         !runoff
         'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_ch', 'soil_rechr_chg', &
-        'basin_sroff', 'dprst_seep_hru', &
         !potet
         'potet', &
         
@@ -669,7 +686,6 @@
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         
         !potet
-        'basin_potet', &
         
         !soil (this)
         'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
@@ -697,194 +713,188 @@
     
     select case(name)
     case('nowtime')
-        size = sizeof(this%model%model_simulation%model_time%nowtime)
+        size = sizeof(this%model%model_simulation%model_time%nowtime(1))
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil')
         size = sizeof(this%model%model_simulation%runoff%srunoff_updated_soil)
         bmi_status = BMI_SUCCESS
     case('transp_on')
-        size = sizeof(this%model%model_simulation%transpiration%transp_on)
+        size = sizeof(this%model%model_simulation%transpiration%transp_on(1))
         bmi_status = BMI_SUCCESS
     case('hru_ppt')
-        size = sizeof(this%model%model_simulation%model_precip%hru_ppt)
+        size = sizeof(this%model%model_simulation%model_precip%hru_ppt(1))
         bmi_status = BMI_SUCCESS
     case('dprst_evap_hru')
-        size = sizeof(this%model%model_simulation%runoff%dprst_evap_hru)
+        size = sizeof(this%model%model_simulation%runoff%dprst_evap_hru(1))
         bmi_status = BMI_SUCCESS
     case('infil')
-        size = sizeof(this%model%model_simulation%runoff%infil)
+        size = sizeof(this%model%model_simulation%runoff%infil(1))
         bmi_status = BMI_SUCCESS
     case('sroff')
-        size = sizeof(this%model%model_simulation%runoff%sroff)
+        size = sizeof(this%model%model_simulation%runoff%sroff(1))
         bmi_status = BMI_SUCCESS
     case('potet')
-        size = sizeof(this%model%model_simulation%potet%potet)
+        size = sizeof(this%model%model_simulation%potet%potet(1))
         bmi_status = BMI_SUCCESS
     case('hru_intcpevap')
-        size = sizeof(this%model%model_simulation%intcp%hru_intcpevap)
+        size = sizeof(this%model%model_simulation%intcp%hru_intcpevap(1))
         bmi_status = BMI_SUCCESS
     case('snow_evap')
-        size = sizeof(this%model%model_simulation%snow%snow_evap)
+        size = sizeof(this%model%model_simulation%snow%snow_evap(1))
         bmi_status = BMI_SUCCESS
     case('snowcov_area')
-        size = sizeof(this%model%model_simulation%snow%snowcov_area)
+        size = sizeof(this%model%model_simulation%snow%snowcov_area(1))
         bmi_status = BMI_SUCCESS
     case('soil_rechr')
-        size = sizeof(this%model%model_simulation%climate%soil_rechr)
+        size = sizeof(this%model%model_simulation%climate%soil_rechr(1))
         bmi_status = BMI_SUCCESS
     case('soil_rechr_max')
-        size = sizeof(this%model%model_simulation%climate%soil_rechr_max)
+        size = sizeof(this%model%model_simulation%climate%soil_rechr_max(1))
         bmi_status = BMI_SUCCESS
     case('soil_moist')
-        size = sizeof(this%model%model_simulation%climate%soil_moist)
+        size = sizeof(this%model%model_simulation%climate%soil_moist(1))
         bmi_status = BMI_SUCCESS
     case('soil_moist_max')
-        size = sizeof(this%model%model_simulation%climate%soil_moist_max)
+        size = sizeof(this%model%model_simulation%climate%soil_moist_max(1))
         bmi_status = BMI_SUCCESS
     case('hru_area_perv')
-        size = sizeof(this%model%model_simulation%runoff%hru_area_perv)
+        size = sizeof(this%model%model_simulation%runoff%hru_area_perv(1))
         bmi_status = BMI_SUCCESS
     case('hru_impervevap')
-        size = sizeof(this%model%model_simulation%runoff%hru_impervevap)
+        size = sizeof(this%model%model_simulation%runoff%hru_impervevap(1))
         bmi_status = BMI_SUCCESS
     case('soil_moist_chg')
-        size = sizeof(this%model%model_simulation%runoff%soil_moist_chg)
+        size = sizeof(this%model%model_simulation%runoff%soil_moist_chg(1))
         bmi_status = BMI_SUCCESS
     case('soil_rechr_chg')
-        size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg)
-        bmi_status = BMI_SUCCESS
-    case('basin_potet')
-        size = sizeof(this%model%model_simulation%potet%basin_potet)
-        bmi_status = BMI_SUCCESS
-    case('basin_sroff')
-        size = sizeof(this%model%model_simulation%runoff%basin_sroff)
+        size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg(1))
         bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
-        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru)
+        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        size = sizeof(this%model%model_simulation%runoff%strm_seg_in)
+        size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
         bmi_status = BMI_SUCCESS
     case('hru_frac_perv')
-        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv)
+        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
         bmi_status = BMI_SUCCESS
 
         !soilzone vars
     case('soil_moist_tot')
-        size = sizeof(this%model%model_simulation%soil%soil_moist_tot)
+        size = sizeof(this%model%model_simulation%soil%soil_moist_tot(1))
         bmi_status = BMI_SUCCESS
     case('soil_to_gw')
-        size = sizeof(this%model%model_simulation%soil%soil_to_gw)
+        size = sizeof(this%model%model_simulation%soil%soil_to_gw(1))
         bmi_status = BMI_SUCCESS
     case('ssr_to_gw')
-        size = sizeof(this%model%model_simulation%soil%ssr_to_gw)
+        size = sizeof(this%model%model_simulation%soil%ssr_to_gw(1))
         bmi_status = BMI_SUCCESS
     case('ssres_flow')
-        size = sizeof(this%model%model_simulation%soil%ssres_flow)
+        size = sizeof(this%model%model_simulation%soil%ssres_flow(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_den')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_den)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_den(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_max')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_max)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_max(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_thrsh')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_thrsh)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_thrsh(1))
         bmi_status = BMI_SUCCESS
     case('soil2gw_max')
-        size = sizeof(this%model%model_simulation%soil%soil2gw_max)
+        size = sizeof(this%model%model_simulation%soil%soil2gw_max(1))
         bmi_status = BMI_SUCCESS
     case('ssr2gw_exp')
-        size = sizeof(this%model%model_simulation%soil%ssr2gw_exp)
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_exp(1))
         bmi_status = BMI_SUCCESS
     case('ssr2gw_rate')
-        size = sizeof(this%model%model_simulation%soil%ssr2gw_rate)
+        size = sizeof(this%model%model_simulation%soil%ssr2gw_rate(1))
         bmi_status = BMI_SUCCESS
     case('sat_threshold')
-        size = sizeof(this%model%model_simulation%soil%sat_threshold)
+        size = sizeof(this%model%model_simulation%soil%sat_threshold(1))
         bmi_status = BMI_SUCCESS
     case('slowcoef_lin')
-        size = sizeof(this%model%model_simulation%soil%slowcoef_lin)
+        size = sizeof(this%model%model_simulation%soil%slowcoef_lin(1))
         bmi_status = BMI_SUCCESS
     case('slowcoef_sq')
-        size = sizeof(this%model%model_simulation%soil%slowcoef_sq)
+        size = sizeof(this%model%model_simulation%soil%slowcoef_sq(1))
         bmi_status = BMI_SUCCESS
     case('fastcoef_lin')
-        size = sizeof(this%model%model_simulation%soil%fastcoef_lin)
+        size = sizeof(this%model%model_simulation%soil%fastcoef_lin(1))
         bmi_status = BMI_SUCCESS
     case('fastcoef_sq')
-        size = sizeof(this%model%model_simulation%soil%fastcoef_sq)
+        size = sizeof(this%model%model_simulation%soil%fastcoef_sq(1))
         bmi_status = BMI_SUCCESS
         
     case('cap_infil_tot')
-       size = sizeof(this%model%model_simulation%soil%cap_infil_tot)
+       size = sizeof(this%model%model_simulation%soil%cap_infil_tot(1))
         bmi_status = BMI_SUCCESS
     case('cap_waterin')
-        size = sizeof(this%model%model_simulation%soil%cap_waterin)
+        size = sizeof(this%model%model_simulation%soil%cap_waterin(1))
         bmi_status = BMI_SUCCESS
     case('dunnian_flow') 
-       size = sizeof(this%model%model_simulation%soil%dunnian_flow)
+       size = sizeof(this%model%model_simulation%soil%dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     !case('hru_sz_cascade_flow')
-    !    dest = [this%model%model_simulation%soil%hru_sz_cascade_flow]
+    !    dest = [this%model%model_simulation%soil%hru_sz_cascade_flow] !dim by 1
     !    bmi_status = BMI_SUCCESS
     case('perv_actet')
-        size = sizeof(this%model%model_simulation%soil%perv_actet)
+        size = sizeof(this%model%model_simulation%soil%perv_actet(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_infil')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_infil)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_infil(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow_stor')
-        size = sizeof(this%model%model_simulation%soil%pref_flow_stor)
+        size = sizeof(this%model%model_simulation%soil%pref_flow_stor(1))
         bmi_status = BMI_SUCCESS
     case('soil_lower')
-        size = sizeof(this%model%model_simulation%soil%soil_lower)
+        size = sizeof(this%model%model_simulation%soil%soil_lower(1))
         bmi_status = BMI_SUCCESS
     case('soil_moist_ante') 
-        size = sizeof(this%model%model_simulation%soil%soil_moist_ante)
+        size = sizeof(this%model%model_simulation%soil%soil_moist_ante(1))
         bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
-        size = sizeof(this%model%model_simulation%soil%soil_to_ssr)
+        size = sizeof(this%model%model_simulation%soil%soil_to_ssr(1))
         bmi_status = BMI_SUCCESS
     case('ssres_in')
-        size = sizeof(this%model%model_simulation%soil%ssres_in)
+        size = sizeof(this%model%model_simulation%soil%ssres_in(1))
         bmi_status = BMI_SUCCESS
     case('ssres_stor_ante')
-        size = sizeof(this%model%model_simulation%soil%ssres_stor_ante)
+        size = sizeof(this%model%model_simulation%soil%ssres_stor_ante(1))
         bmi_status = BMI_SUCCESS
     case('swale_actet')
-        size = sizeof(this%model%model_simulation%soil%swale_actet)
+        size = sizeof(this%model%model_simulation%soil%swale_actet(1))
         bmi_status = BMI_SUCCESS
     case('hru_actet')
-        size = sizeof(this%model%model_simulation%soil%hru_actet)
+        size = sizeof(this%model%model_simulation%soil%hru_actet(1))
         bmi_status = BMI_SUCCESS
     case('ssres_stor')
-        size = sizeof(this%model%model_simulation%soil%ssres_stor)
+        size = sizeof(this%model%model_simulation%soil%ssres_stor(1))
         bmi_status = BMI_SUCCESS
     case('pref_flow')
-        size = sizeof(this%model%model_simulation%soil%pref_flow)
+        size = sizeof(this%model%model_simulation%soil%pref_flow(1))
         bmi_status = BMI_SUCCESS
     case('slow_flow')
-        size = sizeof(this%model%model_simulation%soil%slow_flow)
+        size = sizeof(this%model%model_simulation%soil%slow_flow(1))
         bmi_status = BMI_SUCCESS
     case('slow_stor')
-        size = sizeof(this%model%model_simulation%soil%slow_stor)
+        size = sizeof(this%model%model_simulation%soil%slow_stor(1))
         bmi_status = BMI_SUCCESS
 
     case('grav_dunnian_flow')
-        size = sizeof(this%model%model_simulation%soil%grav_dunnian_flow)
+        size = sizeof(this%model%model_simulation%soil%grav_dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     case('gvr2pfr')
-        size = sizeof(this%model%model_simulation%soil%gvr2pfr)
+        size = sizeof(this%model%model_simulation%soil%gvr2pfr(1))
         bmi_status = BMI_SUCCESS
     case('pfr_dunnian_flow')
-        size = sizeof(this%model%model_simulation%soil%pfr_dunnian_flow)
+        size = sizeof(this%model%model_simulation%soil%pfr_dunnian_flow(1))
         bmi_status = BMI_SUCCESS
     case('upslope_dunnianflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow)
+        size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow(1))
         bmi_status = BMI_SUCCESS
     case('upslope_interflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_interflow)
+        size = sizeof(this%model%model_simulation%soil%upslope_interflow(1))
         bmi_status = BMI_SUCCESS
 
     case default
@@ -1008,20 +1018,11 @@
     case('perv_actet')
         dest = [this%model%model_simulation%soil%perv_actet]
         bmi_status = BMI_SUCCESS
-    case('pref_flow_den')
-        dest = [this%model%model_simulation%soil%pref_flow_den]
-        bmi_status = BMI_SUCCESS
     case('pref_flow_infil')
         dest = [this%model%model_simulation%soil%pref_flow_infil]
         bmi_status = BMI_SUCCESS
-    case('pref_flow_max')
-        dest = [this%model%model_simulation%soil%pref_flow_max]
-        bmi_status = BMI_SUCCESS
     case('pref_flow_stor')
         dest = [this%model%model_simulation%soil%pref_flow_stor]
-        bmi_status = BMI_SUCCESS
-    case('pref_flow_thrsh')
-        dest = [this%model%model_simulation%soil%pref_flow_thrsh]
         bmi_status = BMI_SUCCESS
     case('soil_lower')
         dest = [this%model%model_simulation%soil%soil_lower]
@@ -1056,6 +1057,49 @@
     case('slow_stor')
         dest = [this%model%model_simulation%soil%slow_stor]
         bmi_status = BMI_SUCCESS
+        
+        !Get Calibration Parmas
+    case('soil_rechr_max')
+        dest = [this%model%model_simulation%climate%soil_rechr_max]
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        dest = [this%model%model_simulation%climate%soil_rechr_max]
+        bmi_status = BMI_SUCCESS
+        !soil
+    case('pref_flow_den')
+        dest = [this%model%model_simulation%soil%pref_flow_den]
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_max')
+        dest = [this%model%model_simulation%soil%pref_flow_max]
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_thrsh')
+        dest = [this%model%model_simulation%soil%pref_flow_thrsh]
+        bmi_status = BMI_SUCCESS
+    case('soil2gw_max')
+        dest = [this%model%model_simulation%soil%soil2gw_max]
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_exp')
+        dest = [this%model%model_simulation%soil%ssr2gw_exp]
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_rate')
+        dest = [this%model%model_simulation%soil%ssr2gw_rate]
+        bmi_status = BMI_SUCCESS
+    case('sat_threshold')
+        dest = [this%model%model_simulation%soil%sat_threshold]
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_lin')
+        dest = [this%model%model_simulation%soil%slowcoef_lin]
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_sq')
+        dest = [this%model%model_simulation%soil%slowcoef_sq]
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_lin')
+        dest = [this%model%model_simulation%soil%fastcoef_lin]
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_sq')
+        dest = [this%model%model_simulation%soil%fastcoef_sq]
+        bmi_status = BMI_SUCCESS
+
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
@@ -1482,13 +1526,6 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('pref_flow_den')
-        src = c_loc(this%model%model_simulation%soil%pref_flow_den(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('pref_flow_infil')
         src = c_loc(this%model%model_simulation%soil%pref_flow_infil(1))
         call c_f_pointer(src, src_flattened, [n_elements])
@@ -1496,22 +1533,8 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('pref_flow_max')
-        src = c_loc(this%model%model_simulation%soil%pref_flow_max(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('pref_flow_stor')
         src = c_loc(this%model%model_simulation%soil%pref_flow_stor(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('pref_flow_thrsh')
-        src = c_loc(this%model%model_simulation%soil%pref_flow_thrsh(1))
         call c_f_pointer(src, src_flattened, [n_elements])
         do i = 1,  size(inds)
             dest(i) = src_flattened(inds(i))
@@ -1594,6 +1617,101 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
+        
+        !Get Calibration Parmas
+    case('soil_rechr_max')
+        src = c_loc(this%model%model_simulation%climate%soil_rechr_max(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        src = c_loc(this%model%model_simulation%climate%soil_moist_max(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+        !soil
+    case('pref_flow_den')
+        src = c_loc(this%model%model_simulation%soil%pref_flow_den(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_max')
+        src = c_loc(this%model%model_simulation%soil%pref_flow_max(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('pref_flow_thrsh')
+        src = c_loc(this%model%model_simulation%soil%pref_flow_thrsh(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('soil2gw_max')
+        src = c_loc(this%model%model_simulation%soil%soil2gw_max(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_exp')
+        src = c_loc(this%model%model_simulation%soil%ssr2gw_exp(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('ssr2gw_rate')
+        src = c_loc(this%model%model_simulation%soil%ssr2gw_rate(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('sat_threshold')
+        src = c_loc(this%model%model_simulation%soil%sat_threshold(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_lin')
+        src = c_loc(this%model%model_simulation%soil%slowcoef_lin(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('slowcoef_sq')
+        src = c_loc(this%model%model_simulation%soil%slowcoef_sq(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_lin')
+        src = c_loc(this%model%model_simulation%soil%fastcoef_lin(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('fastcoef_sq')
+        src = c_loc(this%model%model_simulation%soil%fastcoef_sq(1))
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -1799,12 +1917,6 @@
       integer :: bmi_status
     
     select case(name)
-    case('basin_potet')
-        this%model%model_simulation%potet%basin_potet = src(1)
-        bmi_status = BMI_SUCCESS
-    case('basin_sroff')
-        this%model%model_simulation%runoff%basin_sroff = src(1)
-        bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
         this%model%model_simulation%runoff%dprst_seep_hru = src
         bmi_status = BMI_SUCCESS

@@ -12,6 +12,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "irf_ex", "irf_ex\irf_ex.vfp
 		{637D81BB-3839-408E-8D98-3FAB44AEF0CE} = {637D81BB-3839-408E-8D98-3FAB44AEF0CE}
 	EndProjectSection
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_set_value_at_indices", "test_set_value_at_indices\test_set_value_at_indices.vfproj", "{E3A027E4-21D1-4B9D-8135-11167E5B51F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -42,6 +44,13 @@ Global
 		{FAE06685-C62A-42CC-A557-4BEB5DA47F8F}.Release|x64.ActiveCfg = Release|Win32
 		{FAE06685-C62A-42CC-A557-4BEB5DA47F8F}.Release|x86.ActiveCfg = Release|Win32
 		{FAE06685-C62A-42CC-A557-4BEB5DA47F8F}.Release|x86.Build.0 = Release|Win32
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Debug|x64.ActiveCfg = Debug|x64
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Debug|x64.Build.0 = Debug|x64
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Debug|x86.ActiveCfg = Debug|Win32
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Debug|x86.Build.0 = Debug|Win32
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Release|x64.ActiveCfg = Release|Win32
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Release|x86.ActiveCfg = Release|Win32
+		{E3A027E4-21D1-4B9D-8135-11167E5B51F4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
