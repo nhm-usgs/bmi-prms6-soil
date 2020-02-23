@@ -29,24 +29,25 @@ program test_set_value
       ! Test getting logical val .
   function test1() result(code)
     character (len=*), parameter :: &
-         var_name = "gsflow_mode"
-    integer, parameter :: size = 1
-    logical, parameter :: expected(size) = (/ .FALSE. /)
-    integer :: val(size), val2(size)
+         var_name = "pref_flow_den"
+    integer, parameter :: size = 14
+    integer :: dims(1) = size
+    real, parameter :: expected(size) = (/ 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, &
+                                              0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25 /)
+    real :: val(size), val2(size)
     integer :: i, code
 
     code = m%initialize(config_file)
     code = m%get_value(var_name, val)
-    val(1) = .TRUE.
+    val = 0.25
     code = m%set_value(var_name, val)
     code = m%get_value(var_name, val2)
     code = m%finalize()
-    if(val2(1)) write(*,*) 'yes its true'
     
     ! Visual inspection.
-    write(*,*) "Test 2"
-    write(*,*) val
-    write(*,*) val2
+    write(*,*) "Test 1"
+    call print_1darray(val, dims)
+    call print_1darray(val2, dims)
 
     code = BMI_SUCCESS
     do i = 1, size
