@@ -256,10 +256,10 @@ program irf_test
         !code = msurf%get_value('seg_outflow', r64var)
         !code = msoil%set_value('seg_outflow', r64var)
 
-        nelem  = getvarsize(msurf, msoil, 'strm_seg_in')
-        call allocr64var(r64var, nelem)
-        code = msurf%get_value('strm_seg_in', r64var)
-        code = msoil%set_value('strm_seg_in', r64var)
+        !nelem  = getvarsize(msurf, msoil, 'strm_seg_in')
+        !call allocr64var(r64var, nelem)
+        !code = msurf%get_value('strm_seg_in', r64var)
+        !code = msoil%set_value('strm_seg_in', r64var)
         
     end function surface2soil
     

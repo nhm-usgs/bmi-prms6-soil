@@ -6,4 +6,5 @@ output/
 *.default
 *.simple1
 *.msgs
+*.swo
 sf_data
