@@ -18,6 +18,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_get_value", "test_get_
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_get_value_at_indices", "test_get_value_at_indices\test_get_value_at_indices.vfproj", "{134F7BD2-936D-4CA0-AC5D-0909A70D0F01}"
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_get_value_ptr", "test_get_value_ptr\test_get_value_ptr.vfproj", "{193D47CE-DE50-4667-992E-5CF05D6BD146}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -69,6 +71,13 @@ Global
 		{134F7BD2-936D-4CA0-AC5D-0909A70D0F01}.Release|x64.ActiveCfg = Release|Win32
 		{134F7BD2-936D-4CA0-AC5D-0909A70D0F01}.Release|x86.ActiveCfg = Release|Win32
 		{134F7BD2-936D-4CA0-AC5D-0909A70D0F01}.Release|x86.Build.0 = Release|Win32
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Debug|x64.ActiveCfg = Debug|x64
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Debug|x64.Build.0 = Debug|x64
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Debug|x86.ActiveCfg = Debug|Win32
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Debug|x86.Build.0 = Debug|Win32
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Release|x64.ActiveCfg = Release|Win32
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Release|x86.ActiveCfg = Release|Win32
+		{193D47CE-DE50-4667-992E-5CF05D6BD146}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
