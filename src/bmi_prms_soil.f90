@@ -84,7 +84,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 33
-    integer, parameter :: output_item_count = 49
+    integer, parameter :: output_item_count = 47
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -166,10 +166,8 @@
         'pref_flow_stor      ', & !r32 by nhru
         'pref_flow_thrsh     ', & !r32 by nhru
         'soil_lower          ', & !r32 by nhru
-        'soil_moist_ante     ', & !r32 by nhru
         'soil_to_ssr         ', & !r32 by nhru
         'ssres_in            ', & !r32 by nhru
-        'ssres_stor_ante     ', & !r32 by nhru
         'swale_actet         ', & !r32 by nhru
         'upslope_dunnianflow ', &!r64 by nhru
         'upslope_interflow   ', & !r64 by nhru
@@ -407,8 +405,8 @@
         !'hru_sz_cascade_flow',  
         'perv_actet', &
         'pref_flow_infil', 'pref_flow_stor', & 
-        'soil_lower', 'soil_moist_ante', & 
-        'soil_to_ssr', 'ssres_in', 'ssres_stor_ante', 'swale_actet', &
+        'soil_lower', & 
+        'soil_to_ssr', 'ssres_in', 'swale_actet', &
         'upslope_dunnianflow',  'upslope_interflow', 'pfr_dunnian_flow', & 
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         grid = 0
@@ -635,8 +633,8 @@
         !'hru_sz_cascade_flow',  
         'perv_actet', &
         'pref_flow_infil', 'pref_flow_stor', & 
-        'soil_lower', 'soil_moist_ante', & 
-        'soil_to_ssr', 'ssres_in', 'ssres_stor_ante', 'swale_actet', &
+        'soil_lower',  & 
+        'soil_to_ssr', 'ssres_in', 'swale_actet', &
         'pfr_dunnian_flow', & 
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         type = "real"
@@ -850,17 +848,11 @@
     case('soil_lower')
         size = sizeof(this%model%model_simulation%soil%soil_lower(1))
         bmi_status = BMI_SUCCESS
-    case('soil_moist_ante') 
-        size = sizeof(this%model%model_simulation%soil%soil_moist_ante(1))
-        bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
         size = sizeof(this%model%model_simulation%soil%soil_to_ssr(1))
         bmi_status = BMI_SUCCESS
     case('ssres_in')
         size = sizeof(this%model%model_simulation%soil%ssres_in(1))
-        bmi_status = BMI_SUCCESS
-    case('ssres_stor_ante')
-        size = sizeof(this%model%model_simulation%soil%ssres_stor_ante(1))
         bmi_status = BMI_SUCCESS
     case('swale_actet')
         size = sizeof(this%model%model_simulation%soil%swale_actet(1))
@@ -1027,17 +1019,11 @@
     case('soil_lower')
         dest = [this%model%model_simulation%soil%soil_lower]
         bmi_status = BMI_SUCCESS
-    case('soil_moist_ante') 
-        dest = [this%model%model_simulation%soil%soil_moist_ante]
-        bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
         dest = [this%model%model_simulation%soil%soil_to_ssr]
         bmi_status = BMI_SUCCESS
     case('ssres_in')
         dest = [this%model%model_simulation%soil%ssres_in]
-        bmi_status = BMI_SUCCESS
-    case('ssres_stor_ante')
-        dest = [this%model%model_simulation%soil%ssres_stor_ante]
         bmi_status = BMI_SUCCESS
     case('swale_actet')
         dest = [this%model%model_simulation%soil%swale_actet]
@@ -1298,12 +1284,6 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('soil_moist_ante') 
-        src = c_loc(this%model%model_simulation%soil%soil_moist_ante(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
         src = c_loc(this%model%model_simulation%soil%soil_to_ssr(1))
         status = this%get_var_grid(name,gridid)
@@ -1312,12 +1292,6 @@
         bmi_status = BMI_SUCCESS
     case('ssres_in')
         src = c_loc(this%model%model_simulation%soil%ssres_in(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-    case('ssres_stor_ante')
-        src = c_loc(this%model%model_simulation%soil%ssres_stor_ante(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
@@ -1547,13 +1521,6 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('soil_moist_ante') 
-        src = c_loc(this%model%model_simulation%soil%soil_moist_ante(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('soil_to_ssr')
         src = c_loc(this%model%model_simulation%soil%soil_to_ssr(1))
         call c_f_pointer(src, src_flattened, [n_elements])
@@ -1563,13 +1530,6 @@
         bmi_status = BMI_SUCCESS
     case('ssres_in')
         src = c_loc(this%model%model_simulation%soil%ssres_in(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('ssres_stor_ante')
-        src = c_loc(this%model%model_simulation%soil%ssres_stor_ante(1))
         call c_f_pointer(src, src_flattened, [n_elements])
         do i = 1,  size(inds)
             dest(i) = src_flattened(inds(i))
