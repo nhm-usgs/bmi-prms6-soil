@@ -12,8 +12,8 @@ program irf_test
   double precision :: time, time0, time1
   character (len=BMI_MAX_UNITS_NAME) :: time_units
     character (len=*), parameter :: control_file = './pipestem/control.simple1'
-  character (len=*), parameter :: control_file1 = './pipestem_surface/control.simple1'
-  character (len=*), parameter :: control_file2 = './pipestem_soil/control.simple1'
+  character (len=*), parameter :: control_file1 = './pipestem_surface/control_surface.simple1'
+  character (len=*), parameter :: control_file2 = './pipestem_soil/control_soil.simple1'
   double precision :: endtime
 
   write (*,"(a)",advance="no") "Initializing..."
