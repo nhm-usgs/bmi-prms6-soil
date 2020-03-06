@@ -1,5 +1,3 @@
 pipestem/
-pipstem_soil/
-pipstem_surface/
-pipstem_soil/output/*
-pipstem_surface/ouput/*
+pipestem_soil/
+pipestem_surface/

@@ -1,4 +1,5 @@
 output/
+pipestem/
 *.nc
 *.wbal
 *.txt
@@ -6,4 +7,5 @@ output/
 *.default
 *.simple1
 *.msgs
+*.swo
 sf_data

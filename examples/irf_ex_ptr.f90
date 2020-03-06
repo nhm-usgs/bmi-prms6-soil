@@ -12,13 +12,25 @@ program irf_test
   double precision :: time, time0, time1
   character (len=BMI_MAX_UNITS_NAME) :: time_units
     character (len=*), parameter :: control_file = './pipestem/control.simple1'
-  character (len=*), parameter :: control_file1 = './pipestem_surface/control_surface.simple1'
-  character (len=*), parameter :: control_file2 = './pipestem_soil/control_soil.simple1'
+  character (len=*), parameter :: control_file1 = './pipestem_surface/control.simple1'
+  character (len=*), parameter :: control_file2 = './pipestem_soil/control.simple1'
   double precision :: endtime
-
+  real, pointer, dimension(:) :: infil, sroff, soil_moist, soil_rechr
+  !real, pointer(:) :: sroff
+  !real, pointer(:) :: soil_rechr
+  !real, pointer(:) :: soil_moist
+  real, target, dimension(:) :: t_infil, t_sroff, t_soil_rechr, t_soil_moist
+  
+  infil => t_infil
+  sroff => t_sroff
+  soil_rechr => t_soil_rechr
+  soil_moist => t_soil_moist
+  
   write (*,"(a)",advance="no") "Initializing..."
   s = m_surf%initialize(control_file1)
   s = m_soil%initialize(control_file2)
+  s = m_surf%get_value_ptr('infil', infil)
+  s = m_soil%get_value_ptr('infil', t_infil)
   !s = surface2soil(m_surf, m_soil)
   s = m_surf%get_end_time(endtime)
   do i = 1,int(endtime)
