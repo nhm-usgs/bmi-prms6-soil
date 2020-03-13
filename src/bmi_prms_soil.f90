@@ -26,13 +26,20 @@
     procedure :: get_var_grid => prms_var_grid
     procedure :: get_grid_type => prms_grid_type
     procedure :: get_grid_rank => prms_grid_rank
-    !procedure :: get_grid_shape => prms_grid_shape
+    procedure :: get_grid_shape => prms_grid_shape
     procedure :: get_grid_size => prms_grid_size
-    !procedure :: get_grid_spacing => prms_grid_spacing
-    !procedure :: get_grid_origin => prms_grid_origin
+    procedure :: get_grid_spacing => prms_grid_spacing
+    procedure :: get_grid_origin => prms_grid_origin
     procedure :: get_grid_x => prms_grid_x
     procedure :: get_grid_y => prms_grid_y
     procedure :: get_grid_z => prms_grid_z
+    procedure :: get_grid_node_count => prms_grid_node_count
+    procedure :: get_grid_edge_count => prms_grid_edge_count
+    procedure :: get_grid_face_count => prms_grid_face_count
+    procedure :: get_grid_edge_nodes => prms_grid_edge_nodes
+    procedure :: get_grid_face_edges => prms_grid_face_edges
+    procedure :: get_grid_face_nodes => prms_grid_face_nodes
+    procedure :: get_grid_nodes_per_face => prms_grid_nodes_per_face
     procedure :: get_var_type => prms_var_type
     procedure :: get_var_units => prms_var_units
     procedure :: get_var_itemsize => prms_var_itemsize
@@ -470,23 +477,29 @@
     end select    
     end function prms_grid_rank
 
-    !! The dimensions of a grid.
-    !function prms_grid_shape(this, type, grid_shape) result (bmi_status)
-    !  class (bmi_prms_soil), intent(in) :: this
-    !  integer, intent(in) :: type
-    !  integer, dimension(:), intent(out) :: grid_shape
-    !  integer :: bmi_status
-    !
-    !  select case(type)
-    !  case(0)
-    !     grid_shape = this%model%control_data%nhru%value
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     grid_shape = [-1]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_grid_shape
-    !
+    ! The dimensions of a grid.
+    function prms_grid_shape(this, grid, shape) result (bmi_status)
+      class (bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, dimension(:), intent(out) :: shape
+      integer :: bmi_status
+    
+      select case(grid)
+      case(0)
+         shape(:) = [this%model%model_simulation%model_basin%nhru]
+         bmi_status = BMI_SUCCESS
+     case(1)
+         shape(:) = [this%model%model_simulation%model_basin%nsegment]
+         bmi_status = BMI_SUCCESS
+     case(2)
+         shape(:) = [1]
+         bmi_status = BMI_SUCCESS
+      case default
+         shape(:) = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_shape
+    
     ! The total number of elements in a grid.
     function prms_grid_size(this, grid, size) result (bmi_status)
     class (bmi_prms_soil), intent(in) :: this
@@ -510,40 +523,34 @@
     end select
     end function prms_grid_size
 
-    !! The distance between nodes of a grid.
-    !function prms_grid_spacing(this, type, grid_spacing) result (bmi_status)
-    !  class (bmi_prms_soil), intent(in) :: this
-    !  integer, intent(in) :: type
-    !  real, dimension(:), intent(out) :: grid_spacing
-    !  integer :: bmi_status
-    !
-    !  select case(type)
-    !  case(0)
-    !     grid_spacing = [this%model%dy, this%model%dx]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     grid_spacing = -1
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_grid_spacing
-    !
-    !! Coordinates of grid origin.
-    !function prms_grid_origin(this, type, grid_origin) result (bmi_status)
-    !  class (bmi_prms_soil), intent(in) :: this
-    !  integer, intent(in) :: type
-    !  real, dimension(:), intent(out) :: grid_origin
-    !  integer :: bmi_status
-    !
-    !  select case(type)
-    !  case(0)
-    !     grid_origin = [0.0, 0.0]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     grid_origin = [-1.0]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_grid_origin
-    !
+    ! The distance between nodes of a grid.
+    function prms_grid_spacing(this, grid, spacing) result (bmi_status)
+     class (bmi_prms_soil), intent(in) :: this
+     integer, intent(in) :: grid
+     double precision, dimension(:), intent(out) :: spacing
+     integer :: bmi_status
+
+     select case(grid)
+     case default
+        spacing(:) = -1.d0
+        bmi_status = BMI_FAILURE
+     end select
+    end function prms_grid_spacing
+    
+    ! Coordinates of grid origin.
+    function prms_grid_origin(this, grid, origin) result (bmi_status)
+      class (bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      double precision, dimension(:), intent(out) :: origin
+      integer :: bmi_status
+    
+      select case(grid)
+      case default
+         origin(:) = -1.d0
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_origin
+    
     ! X-coordinates of grid nodes.
     function prms_grid_x(this, grid, x) result (bmi_status)
     class (bmi_prms_soil), intent(in) :: this
@@ -554,6 +561,11 @@
     select case(grid)
     case(0)
         x = this%model%model_simulation%model_basin%hru_x
+        bmi_status = BMI_SUCCESS
+    case(1) 
+        bmi_status = this%get_value('nhm_seg', x)
+    case(2)
+        x = -1.d0
         bmi_status = BMI_SUCCESS
     case default
         x = [-1.0]
@@ -572,6 +584,12 @@
     case(0)
         y = this%model%model_simulation%model_basin%hru_y
         bmi_status = BMI_SUCCESS
+    case(1) 
+        y(:) = -1.d0
+        bmi_status = BMI_SUCCESS
+    case(2)
+        y = -1.d0
+        bmi_status = BMI_SUCCESS
     case default
         y = [-1.0]
         bmi_status = BMI_FAILURE
@@ -589,12 +607,124 @@
     case(0)
         z = this%model%model_simulation%model_basin%hru_elev
         bmi_status = BMI_SUCCESS
+    case(1) 
+        z(:) = -1.d0
+        bmi_status = BMI_SUCCESS
+    case(2)
+        z = -1.d0
+        bmi_status = BMI_SUCCESS
     case default
         z = [-1.0]
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_z
-    !
+
+    ! Get the number of nodes in an unstructured grid.
+    function prms_grid_node_count(this, grid, count) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, intent(out) :: count
+      integer :: bmi_status
+
+      select case(grid)
+      case(0:2)
+         bmi_status = this%get_grid_size(grid, count)
+      case default
+         count = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_node_count
+
+    ! Get the number of edges in an unstructured grid.
+    function prms_grid_edge_count(this, grid, count) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, intent(out) :: count
+      integer :: bmi_status
+
+      select case(grid)
+      case (0:2)
+         bmi_status = this%get_grid_node_count(grid, count)
+         count = count - 1
+      case default
+         count = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_edge_count
+
+    ! Get the number of faces in an unstructured grid.
+    function prms_grid_face_count(this, grid, count) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, intent(out) :: count
+      integer :: bmi_status
+
+      select case(grid)
+      case (0:2)
+         count = 0
+         bmi_status = BMI_SUCCESS
+      case default
+         count = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_face_count
+
+    ! Get the edge-node connectivity.
+    function prms_grid_edge_nodes(this, grid, edge_nodes) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, dimension(:), intent(out) :: edge_nodes
+      integer :: bmi_status
+
+      select case(grid)
+      case default
+         edge_nodes(:) = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_edge_nodes
+
+    ! Get the face-edge connectivity.
+    function prms_grid_face_edges(this, grid, face_edges) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, dimension(:), intent(out) :: face_edges
+      integer :: bmi_status
+
+      select case(grid)
+      case default
+         face_edges(:) = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_face_edges
+
+    ! Get the face-node connectivity.
+    function prms_grid_face_nodes(this, grid, face_nodes) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, dimension(:), intent(out) :: face_nodes
+      integer :: bmi_status
+
+      select case(grid)
+      case default
+         face_nodes(:) = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_face_nodes
+
+    ! Get the number of nodes for each face.
+    function prms_grid_nodes_per_face(this, grid, nodes_per_face) result(bmi_status)
+      class(bmi_prms_soil), intent(in) :: this
+      integer, intent(in) :: grid
+      integer, dimension(:), intent(out) :: nodes_per_face
+      integer :: bmi_status
+
+      select case(grid)
+      case default
+         nodes_per_face(:) = -1
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_grid_nodes_per_face
+
     ! The data type of the variable, as a string.
     function prms_var_type(this, name, type) result (bmi_status)
     class (bmi_prms_soil), intent(in) :: this
@@ -639,7 +769,7 @@
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         type = "real"
         bmi_status = BMI_SUCCESS
-        case( 'soil_rechr', &
+    case( 'soil_rechr', &
         'dprst_seep_hru', 'strm_seg_in', 'grav_dunnian_flow', 'gvr2pfr', &
         'prf_dunnian_flow', 'upslope_dunnian_flow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
@@ -649,8 +779,8 @@
         type = "integer"
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'transp_on')
-            type = 'logical'
-            bmi_status = BMI_SUCCESS
+        type = 'logical'
+        bmi_status = BMI_SUCCESS
     case default
         type = "-"
         bmi_status = BMI_FAILURE
@@ -925,7 +1055,7 @@
 
         select case(name)
         case default
-           location = "face"
+           location = "node"
            bmi_status = BMI_SUCCESS
         end select
     end function prms_var_location
@@ -954,22 +1084,6 @@
       integer :: bmi_status
     
     select case(name)
-        !case("plate_surface__temperature")
-        !   ! This would be safe, but subject to indexing errors.
-        !   ! do j = 1, this%model%n_y
-        !   !    do i = 1, this%model%n_x
-        !   !       k = j + this%model%n_y*(i-1)
-        !   !       dest(k) = this%model%temperature(j,i)
-        !   !    end do
-        !   ! end do
-        !
-        !   ! This is an equivalent, elementwise copy into `dest`.
-        !   ! See https://stackoverflow.com/a/11800068/1563298
-        !   dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
-        !   bmi_status = BMI_SUCCESS
-        !case("plate_surface__thermal_diffusivity")
-        !   dest = [this%model%alpha]
-        !   bmi_status = BMI_SUCCESS
     case('infil')
         dest = [this%model%model_simulation%runoff%infil]
         bmi_status = BMI_SUCCESS
@@ -1140,12 +1254,6 @@
     integer :: n_elements, gridid
 
     select case(name)
-    case('nowtime')
-        src = c_loc(this%model%model_simulation%model_time%nowtime(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case default
        bmi_status = BMI_FAILURE
     end select
@@ -1162,11 +1270,6 @@
     integer :: n_elements, gridid, status
 
     select case(name)
-        !case("plate_surface__temperature")
-        !   src = c_loc(this%model%temperature(1,1))
-        !   n_elements = this%model%n_y * this%model%n_x
-        !   call c_f_pointer(src, dest, [n_elements])
-        !   bmi_status = BMI_SUCCESS
     case('infil')
         src = c_loc(this%model%model_simulation%runoff%infil(1))
         status = this%get_var_grid(name,gridid)
@@ -1332,7 +1435,7 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_ptr_float
@@ -1370,11 +1473,11 @@
          src = c_loc(this%model%model_simulation%soil%upslope_dunnianflow(1))
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-   case('upslope_interflow')
+    case('upslope_interflow')
         src = c_loc(this%model%model_simulation%soil%upslope_interflow(1))
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_ptr_double
@@ -1736,7 +1839,7 @@
         end do
         bmi_status = BMI_SUCCESS
 
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_at_indices_double
@@ -1749,12 +1852,6 @@
       integer :: bmi_status
     
       select case(name)
-      !case("model__identification_number")
-      !   this%model%id = src(1)
-      !   bmi_status = BMI_SUCCESS
-      case('nowtime')
-          this%model%model_simulation%model_time%nowtime = src
-          bmi_status = BMI_SUCCESS
       case('srunoff_updated_soil')
           this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
           bmi_status = BMI_SUCCESS
@@ -1774,11 +1871,6 @@
       integer :: bmi_status
     
     select case(name)
-        !case("plate_surface__temperature")
-        !   src = c_loc(this%model%temperature(1,1))
-        !   n_elements = this%model%n_y * this%model%n_x
-        !   call c_f_pointer(src, dest, [n_elements])
-        !   bmi_status = BMI_SUCCESS
     case('hru_ppt')
         this%model%model_simulation%model_precip%hru_ppt = src
         bmi_status = BMI_SUCCESS
@@ -1921,14 +2013,7 @@
     status = this%get_var_grid(name, gridid)
     status = this%get_grid_size(gridid, n_elements)
 
-      select case(name)
-      !case("plate_soil__temperature")
-      !   dest = c_loc(this%model%temperature(1,1))
-      !   call c_f_pointer(dest, dest_flattened, [this%model%n_y * this%model%n_x])
-      !   do i = 1, size(indices)
-      !      dest_flattened(indices(i)) = src(i)
-      !   end do
-      !   bmi_status = BMI_SUCCESS
+    select case(name)
     case('pref_flow_den')
         dest = c_loc(this%model%model_simulation%soil%pref_flow_den(1))
         call c_f_pointer(dest, dest_flattened, [n_elements])
