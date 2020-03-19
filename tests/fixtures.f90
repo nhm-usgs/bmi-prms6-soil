@@ -2,7 +2,7 @@ module fixtures
     use iso_fortran_env
   implicit none
 
-  character (len=*), parameter :: config_file = "control.simple1"
+  character (len=*), parameter :: config_file = "control.default"
 
   character (len=*), parameter :: var_name = "soil_moist"
 
