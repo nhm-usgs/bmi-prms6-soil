@@ -4,7 +4,7 @@ module fixtures
 
   character (len=*), parameter :: config_file = "control.simple1"
 
-  character (len=*), parameter :: var_name = "hru_ppt"
+  character (len=*), parameter :: var_name = "soil_moist"
 
   integer :: status
   
