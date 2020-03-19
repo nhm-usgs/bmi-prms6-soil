@@ -2,16 +2,20 @@
 
     use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
     use bmiprmssoil
-    use fixtures, only: status, print_1darray, print_i_1darray, &
+    use fixtures, only: config_file, status, print_1darray, print_i_1darray, &
         isreal4equalreal4
 
     implicit none
 
-    character (len=*), parameter :: config_file = "./pipestem/control.simple1"
     type (bmi_prms_soil) :: m
     integer :: retcode
 
     retcode = test1()
+    if (retcode.ne.BMI_SUCCESS) then
+        stop BMI_FAILURE
+    end if
+
+    retcode = test2()
     if (retcode.ne.BMI_SUCCESS) then
         stop BMI_FAILURE
     end if
@@ -21,33 +25,22 @@
 ! Test getting i32 hru_type.
     function test1() result(code)
     character (len=*), parameter :: &
-        var_name = "infil"
+        var_name = "hru_type"
     integer, parameter :: rank = 1
     integer, parameter :: size = 14
     integer, parameter, dimension(rank) :: shape = (/ 14 /)
-    real, parameter, dimension(shape(1)) :: &
-        expected = (/0.02,0.02,0.03,0.04,0.02,0.01,0.03,0.01,0.04,0.09,0.05,0.08,0.05,0.06 /)
-    real, pointer :: tptr(:)
-    integer :: i, code
+    integer, parameter, dimension(shape(1)) :: &
+        expected = (/1,1,1,1,1,1,1,1,1,1,1,1,1,1 /)
+    integer, pointer :: tptr(:)
+    integer :: i, code, status
 
-    double precision :: endtime
-    
     code = m%initialize(config_file)
-    code = m%get_end_time(endtime)
-    do i = 1,int(endtime)
-        status = m%update()
-        if(i == endtime) then
-            code = m%set_value(var_name, expected)
-            code = m%get_value_ptr(var_name, tptr)
-        endif
-    enddo
-    !status = m%get_value(var_name, tval)
-    code = m%finalize()
+    code = m%get_value_ptr(var_name, tptr)
 
 
     ! Visual inspection.
     write(*,*) "Test 1"
-    call print_1darray(tptr, shape)
+    call print_i_1darray(tptr, shape)
     do i = 1, shape(1)
         write(*,*) tptr(i)
     end do
@@ -59,6 +52,8 @@
             exit
         end if
     end do
+
+    code = m%finalize()
 
     end function test1
 
@@ -93,7 +88,7 @@
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-        if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+        if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
             code = BMI_FAILURE
             exit
         end if
