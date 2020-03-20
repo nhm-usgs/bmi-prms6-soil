@@ -181,7 +181,7 @@
         'pfr_dunnian_flow    ', & !r64 by nhru
         'last_soil_moist     ',& !r64 by 1
         'last_ssstor         ', & !r64 by 1
-        !soilzone water-balance and pot calibratoin target
+        !soilzone water-balance and pot calibration target
         'hru_actet           ', & !r32 by nhru
         'ssres_stor          ', & !r32 by nhru
         'pref_flow           ', & !r32 by nhru
