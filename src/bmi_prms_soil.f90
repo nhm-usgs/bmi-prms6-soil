@@ -90,8 +90,8 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 33
-    integer, parameter :: output_item_count = 45
+    integer, parameter :: input_item_count = 32
+    integer, parameter :: output_item_count = 44
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
