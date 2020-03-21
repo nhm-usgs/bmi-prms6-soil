@@ -107,7 +107,7 @@
         'soil_rechr_chg      ', & !r32 by nhru
         'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        'strm_seg_in         ', & !r64 by nsegment
+        !'strm_seg_in         ', & !r64 by nsegment not yet implemented
         
         !potet
         'potet               ', & !r32 by nhru
@@ -122,17 +122,17 @@
         'transp_on           ', & !logical by nhru
 
         !intcp
-        'hru_intcpevap       ', &  !r32 by nhru
+        'hru_intcpevap       ', & !r32 by nhru
 
         !snow
         'snow_evap           ', & !r32 by nhru
         'snowcov_area        ', & !r32 by nhru
 
         !climate
-        'soil_rechr          ', & !r64 by nhru
+        'soil_rechr          ', & !r32 by nhru
         'soil_rechr_max      ', & !r32 by nhru and calibration
         'soil_moist          ', & !r32 by nhru
-        'soil_moist_max      ', &  !r32 by nhru and calibration
+        'soil_moist_max      ', & !r32 by nhru and calibration
         !###################################################!
         ! first cut at                                      !
         !other values that could be used during calibration !
@@ -196,7 +196,7 @@
         !runoff
         'infil               ', & !r32 by nhru transfer to surface
         'sroff               ', & !r32 by nhru transfer to surface
-        'strm_seg_in         ', & !r64 by nhru transfer to surface
+        !'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
         
     !###################################################!
         ! first cut at                                      !
@@ -204,7 +204,7 @@
         !these are soilzone vars                            !
         !climate
         'soil_rechr_max      ', & !r32 by nhru 
-        'soil_moist_max      ', &!r32 by nhru 
+        'soil_moist_max      ', & !r32 by nhru 
         !soil
         'pref_flow_den       ', & !r32 by nhru
         'pref_flow_max       ', & !r32 by nhru
@@ -420,9 +420,9 @@
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         grid = 0
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        grid = 1
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    grid = 1
+    !    bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'last_soil_moist', & 
         'last_ssstor')
         grid = 2
@@ -444,9 +444,9 @@
     case(0)
         type = "vector"
         bmi_status = BMI_SUCCESS
-    case(1)
-        type = "vector"
-        bmi_status = BMI_SUCCESS
+    !case(1)
+    !    type = "vector"
+    !    bmi_status = BMI_SUCCESS
     case(2)
         type = 'scalar'
         bmi_status = BMI_FAILURE
@@ -467,9 +467,9 @@
     case(0)
         rank = 1
         bmi_status = BMI_SUCCESS
-    case(1)
-        rank = 1
-        bmi_status = BMI_SUCCESS
+    !case(1)
+    !    rank = 1
+    !    bmi_status = BMI_SUCCESS
     case(2)
         rank = 0
         bmi_status = BMI_SUCCESS
@@ -490,9 +490,9 @@
       case(0)
          shape(:) = [this%model%model_simulation%model_basin%nhru]
          bmi_status = BMI_SUCCESS
-     case(1)
-         shape(:) = [this%model%model_simulation%model_basin%nsegment]
-         bmi_status = BMI_SUCCESS
+     !case(1)
+     !    shape(:) = [this%model%model_simulation%model_basin%nsegment]
+     !    bmi_status = BMI_SUCCESS
      case(2)
          shape(:) = [1]
          bmi_status = BMI_SUCCESS
@@ -513,9 +513,9 @@
     case(0)
         size = this%model%model_simulation%model_basin%nhru
         bmi_status = BMI_SUCCESS
-    case(1)
-        size = this%model%model_simulation%model_basin%nsegment
-        bmi_status = BMI_SUCCESS
+    !case(1)
+    !    size = this%model%model_simulation%model_basin%nsegment
+    !    bmi_status = BMI_SUCCESS
     case(2)
         size = 1
         bmi_status = BMI_SUCCESS
@@ -564,8 +564,8 @@
     case(0)
         x = this%model%model_simulation%model_basin%hru_x
         bmi_status = BMI_SUCCESS
-    case(1) 
-        bmi_status = this%get_value('nhm_seg', x)
+    !case(1) 
+    !    bmi_status = this%get_value('nhm_seg', x)
     case(2)
         x = -1.d0
         bmi_status = BMI_SUCCESS
@@ -586,9 +586,9 @@
     case(0)
         y = this%model%model_simulation%model_basin%hru_y
         bmi_status = BMI_SUCCESS
-    case(1) 
-        y(:) = -1.d0
-        bmi_status = BMI_SUCCESS
+    !case(1) 
+    !    y(:) = -1.d0
+    !    bmi_status = BMI_SUCCESS
     case(2)
         y = -1.d0
         bmi_status = BMI_SUCCESS
@@ -609,9 +609,9 @@
     case(0)
         z = this%model%model_simulation%model_basin%hru_elev
         bmi_status = BMI_SUCCESS
-    case(1) 
-        z(:) = -1.d0
-        bmi_status = BMI_SUCCESS
+    !case(1) 
+    !    z(:) = -1.d0
+    !    bmi_status = BMI_SUCCESS
     case(2)
         z = -1.d0
         bmi_status = BMI_SUCCESS
@@ -772,7 +772,8 @@
         type = "real"
         bmi_status = BMI_SUCCESS
     case( 'soil_rechr', &
-        'dprst_seep_hru', 'strm_seg_in', 'grav_dunnian_flow', 'gvr2pfr', &
+        !'strm_seg_in', &
+        'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
         'prf_dunnian_flow', 'upslope_dunnian_flow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
         type = "double"
@@ -822,9 +823,9 @@
         'pref_flow_max', 'pref_flow_thrsh')
         units = "in"
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        units = "ft3 s-1"
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    units = "ft3 s-1"
+    !    bmi_status = BMI_SUCCESS
     case('snow_cov_area')
         units = 'acres'
         bmi_status = BMI_SUCCESS
@@ -902,9 +903,9 @@
     case('dprst_seep_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
+    !    bmi_status = BMI_SUCCESS
     case('hru_frac_perv')
         size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
         bmi_status = BMI_SUCCESS
@@ -1216,9 +1217,9 @@
     integer :: bmi_status
 
     select case(name)
-    case('strm_seg_in')
-        dest = [this%model%model_simulation%runoff%strm_seg_in]
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    dest = [this%model%model_simulation%runoff%strm_seg_in]
+    !    bmi_status = BMI_SUCCESS
     case('grav_dunnian_flow')
         dest = [this%model%model_simulation%soil%grav_dunnian_flow]
         bmi_status = BMI_SUCCESS
@@ -1455,10 +1456,10 @@
     status = this%get_grid_size(gridid, n_elements)
 
     select case(name)
-    case('strm_seg_in')
-        src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+    !    call c_f_pointer(src, dest_ptr, [n_elements])
+    !    bmi_status = BMI_SUCCESS
     case('grav_dunnian_flow')
         src = c_loc(this%model%model_simulation%soil%grav_dunnian_flow(1))
         call c_f_pointer(src, dest_ptr, [n_elements])
@@ -1798,13 +1799,13 @@
     status = this%get_grid_size(gridid, n_elements)
 
     select case(name)
-    case('strm_seg_in')
-        src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+    !    call c_f_pointer(src, src_flattened, [n_elements])
+    !    do i = 1,  size(inds)
+    !        dest(i) = src_flattened(inds(i))
+    !    end do
+    !    bmi_status = BMI_SUCCESS
     case('grav_dunnian_flow')
         src = c_loc(this%model%model_simulation%soil%grav_dunnian_flow(1))
         call c_f_pointer(src, src_flattened, [n_elements])
@@ -1974,9 +1975,9 @@
     case('dprst_seep_hru')
         this%model%model_simulation%runoff%dprst_seep_hru = src
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        this%model%model_simulation%runoff%strm_seg_in = src
-        bmi_status = BMI_SUCCESS
+    !case('strm_seg_in')
+    !    this%model%model_simulation%runoff%strm_seg_in = src
+    !    bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select
