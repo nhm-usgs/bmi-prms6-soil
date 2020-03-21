@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 33
-    integer, parameter :: output_item_count = 47
+    integer, parameter :: output_item_count = 45
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -176,8 +176,9 @@
         'soil_to_ssr         ', & !r32 by nhru
         'ssres_in            ', & !r32 by nhru
         'swale_actet         ', & !r32 by nhru
-        'upslope_dunnianflow ', &!r64 by nhru
-        'upslope_interflow   ', & !r64 by nhru
+        ! 2 below not yet active will ! for now
+        !'upslope_dunnianflow ', &!r64 by nhru
+        !'upslope_interflow   ', & !r64 by nhru
         'pfr_dunnian_flow    ', & !r64 by nhru
         'last_soil_moist     ',& !r64 by 1
         'last_ssstor         ', & !r64 by 1
@@ -414,7 +415,8 @@
         'pref_flow_infil', 'pref_flow_stor', & 
         'soil_lower', & 
         'soil_to_ssr', 'ssres_in', 'swale_actet', &
-        'upslope_dunnianflow',  'upslope_interflow', 'pfr_dunnian_flow', & 
+        !'upslope_dunnianflow',  'upslope_interflow', &
+        'pfr_dunnian_flow', & 
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
         grid = 0
         bmi_status = BMI_SUCCESS
@@ -1012,12 +1014,12 @@
     case('pfr_dunnian_flow')
         size = sizeof(this%model%model_simulation%soil%pfr_dunnian_flow(1))
         bmi_status = BMI_SUCCESS
-    case('upslope_dunnianflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow(1))
-        bmi_status = BMI_SUCCESS
-    case('upslope_interflow')
-        size = sizeof(this%model%model_simulation%soil%upslope_interflow(1))
-        bmi_status = BMI_SUCCESS
+    !case('upslope_dunnianflow')
+    !    size = sizeof(this%model%model_simulation%soil%upslope_dunnianflow(1))
+    !    bmi_status = BMI_SUCCESS
+    !case('upslope_interflow')
+    !    size = sizeof(this%model%model_simulation%soil%upslope_interflow(1))
+    !    bmi_status = BMI_SUCCESS
 
     case default
         size = -1
@@ -1226,12 +1228,12 @@
     case('pfr_dunnian_flow')
         dest = [this%model%model_simulation%soil%pfr_dunnian_flow]
         bmi_status = BMI_SUCCESS
-    case('upslope_dunnianflow')
-        dest = [this%model%model_simulation%soil%upslope_dunnianflow]
-        bmi_status = BMI_SUCCESS
-    case('upslope_interflow')
-        dest = [this%model%model_simulation%soil%upslope_interflow]
-        bmi_status = BMI_SUCCESS
+    !case('upslope_dunnianflow')
+    !    dest = [this%model%model_simulation%soil%upslope_dunnianflow]
+    !    bmi_status = BMI_SUCCESS
+    !case('upslope_interflow')
+    !    dest = [this%model%model_simulation%soil%upslope_interflow]
+    !    bmi_status = BMI_SUCCESS
     case('last_soil_moist')
         dest = [this%model%model_simulation%soil%last_soil_moist]
         bmi_status = BMI_SUCCESS
@@ -1469,14 +1471,14 @@
         src = c_loc(this%model%model_simulation%soil%pfr_dunnian_flow(1))
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('upslope_dunnianflow')
-         src = c_loc(this%model%model_simulation%soil%upslope_dunnianflow(1))
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-    case('upslope_interflow')
-        src = c_loc(this%model%model_simulation%soil%upslope_interflow(1))
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+    !case('upslope_dunnianflow')
+    !     src = c_loc(this%model%model_simulation%soil%upslope_dunnianflow(1))
+    !    call c_f_pointer(src, dest_ptr, [n_elements])
+    !    bmi_status = BMI_SUCCESS
+    !case('upslope_interflow')
+    !    src = c_loc(this%model%model_simulation%soil%upslope_interflow(1))
+    !    call c_f_pointer(src, dest_ptr, [n_elements])
+    !    bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -1824,20 +1826,20 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('upslope_dunnianflow')
-        src = c_loc(this%model%model_simulation%soil%upslope_dunnianflow(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('upslope_interflow')
-        src = c_loc(this%model%model_simulation%soil%upslope_interflow(1))
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
+    !case('upslope_dunnianflow')
+    !    src = c_loc(this%model%model_simulation%soil%upslope_dunnianflow(1))
+    !    call c_f_pointer(src, src_flattened, [n_elements])
+    !    do i = 1,  size(inds)
+    !        dest(i) = src_flattened(inds(i))
+    !    end do
+    !    bmi_status = BMI_SUCCESS
+    !case('upslope_interflow')
+    !    src = c_loc(this%model%model_simulation%soil%upslope_interflow(1))
+    !    call c_f_pointer(src, src_flattened, [n_elements])
+    !    do i = 1,  size(inds)
+    !        dest(i) = src_flattened(inds(i))
+    !    end do
+    !    bmi_status = BMI_SUCCESS
 
     case default
         bmi_status = BMI_FAILURE
