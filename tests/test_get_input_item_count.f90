@@ -6,7 +6,7 @@ program test_get_input_item_count
 
   implicit none
 
-  integer, parameter :: expected = 33
+  integer, parameter :: expected = 31
   type (bmi_prms_soil) :: m
   integer :: count
 
