@@ -90,8 +90,8 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 32
-    integer, parameter :: output_item_count = 44
+    integer, parameter :: input_item_count = 31
+    integer, parameter :: output_item_count = 45
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -111,9 +111,6 @@
         
         !potet
         'potet               ', & !r32 by nhru
-
-        !prsm_time
-        'nowtime             ', & !i32(6)
 
         !precipitation
         'hru_ppt             ', & !r32 by nhru
@@ -198,6 +195,9 @@
         'sroff               ', & !r32 by nhru transfer to surface
         !'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
         
+        !prsm_time
+        'nowtime             ', & !i32(6)
+
     !###################################################!
         ! first cut at                                      !
         !other values that could be used during calibration !

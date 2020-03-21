@@ -28,6 +28,11 @@
      stop BMI_FAILURE
   end if
 
+    !test nowtime i(6)
+  retcode = test4()
+  if (retcode.ne.BMI_SUCCESS) then
+     stop BMI_FAILURE
+  end if
 
 contains
 
@@ -149,4 +154,41 @@ contains
     end do
   end function test3
 
+  !test nowtime
+  function test4() result(status)
+    character (len=*), parameter :: &
+         var_name = "nowtime"
+    integer, parameter :: rank = 1
+    integer, parameter :: size = 6
+    integer, parameter, dimension(rank) :: shape = (/ 6 /)
+    integer, parameter, dimension(shape(1)) :: &
+         expected = (/ 1981, 12, 31, 0, 0, 0 /)
+    integer :: tval(size)
+    integer :: i, status
+    double precision :: endtime
+    
+    status = m%initialize(config_file)
+    status = m%get_end_time(endtime)
+    do i = 1,int(endtime)
+        status = m%update()
+        if(i == endtime) then
+            status = m%get_value(var_name, tval)
+        endif
+    enddo
+    !status = m%get_value(var_name, tval)
+    status = m%finalize()
+  
+    ! Visual inspection.
+    write(*,*) "Test 4"
+    call print_i_1darray(tval, shape)
+    call print_i_1darray(expected, shape)
+  
+    status = BMI_SUCCESS
+    do i = 1, size
+       if (tval(i).ne.expected(i)) then
+          status = BMI_FAILURE
+       end if
+    end do
+  end function test4
+  
   end program test_get_value

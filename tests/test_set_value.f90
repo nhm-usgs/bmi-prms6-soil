@@ -60,6 +60,7 @@
     end do
   end function test1
 
+  !test r64 by nhru
   function test2() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_vol_open"
@@ -93,6 +94,5 @@
        end if
     end do
   end function test2
-
   
 end program test_set_value
