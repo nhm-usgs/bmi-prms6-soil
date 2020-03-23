@@ -32,17 +32,17 @@
     real, parameter, dimension(shape(1)) :: &
         expected = (/0.02,0.02,0.03,0.04,0.02,0.01,0.03,0.01,0.04,0.09,0.05,0.08,0.05,0.06 /)
     real, pointer :: tptr(:)
-    integer :: i, code
+    integer :: i, status, code
 
     double precision :: endtime
     
-    code = m%initialize(config_file)
-    code = m%get_end_time(endtime)
+    status = m%initialize(config_file)
+    status = m%get_end_time(endtime)
     do i = 1,int(endtime)
         status = m%update()
         if(i == endtime) then
-            code = m%set_value(var_name, expected)
-            code = m%get_value_ptr(var_name, tptr)
+            status = m%set_value(var_name, expected)
+            status = m%get_value_ptr(var_name, tptr)
         endif
     enddo
     !status = m%get_value(var_name, tval)
@@ -61,11 +61,11 @@
             exit
         end if
     end do
-    code = m%finalize()
+    status = m%finalize()
 
     end function test1
 ! Test getting r64 hru_area.
-  function test2() result(status)
+  function test2() result(code)
     character (len=*), parameter :: &
          var_name = "pfr_dunnian_flow"
     integer, parameter :: rank = 1
@@ -78,7 +78,7 @@
                       0.00D+000, 0.00D+000 /)
     double precision, pointer :: tptr(:)
 
-    integer :: i, status
+    integer :: i, status, code
     double precision :: endtime
     
     status = m%initialize(config_file)
@@ -98,10 +98,10 @@
     write(*,*) "Get Value Ptr"
     call print_d_1darray(tptr, shape)
 
-    status = BMI_SUCCESS
+    code = BMI_SUCCESS
     do i = 1, size
        if (tptr(i).ne.expected(i)) then
-          status = BMI_FAILURE
+          code = BMI_FAILURE
        end if
     end do
     status = m%finalize()
