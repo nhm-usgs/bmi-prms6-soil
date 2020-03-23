@@ -1,29 +1,34 @@
 program test_get_grid_x
 
-  use bmif_1_2, only: BMI_FAILURE
-  use bmiheatf
+  use bmif_2_0, only: BMI_FAILURE
+  use bmiprmssoil
   use fixtures, only: config_file, status
 
   implicit none
 
-  integer, parameter :: grid_id = 1
-  integer, parameter :: nx = 1
-  double precision, parameter, dimension(nx) :: expected_x = (/ 0.0 /)
+  integer, parameter :: grid_id = 0
+  integer, parameter :: nx = 14
+  integer, parameter, dimension(nx) :: expected_x = [ &
+       -255338, -244755, -272161, -279352, -239341, -234624, -262778, &
+       -260845, -253183, -252164, -242704, -238578, -226690, -238430 ]
 
-  type (bmi_heat) :: m
-  double precision, dimension(nx) :: grid_x
+  type (bmi_prms_soil) :: m
+  integer :: grid_size
+  double precision, allocatable :: grid_x(:)
   integer :: i
 
   status = m%initialize(config_file)
+  status = m%get_grid_size(grid_id, grid_size)
+  allocate(grid_x(grid_size))
   status = m%get_grid_x(grid_id, grid_x)
   status = m%finalize()
 
-  print *, grid_x
-  print *, expected_x
-
   do i = 1, nx
-     if (grid_x(i).ne.expected_x(i)) then
+     if (int(grid_x(i)) /= expected_x(i)) then
+        write(*,*) grid_x
         stop BMI_FAILURE
      end if
   end do
+
+  deallocate(grid_x)
 end program test_get_grid_x

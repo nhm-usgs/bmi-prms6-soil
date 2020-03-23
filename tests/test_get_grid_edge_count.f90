@@ -1,4 +1,4 @@
-program test_get_grid_rank
+program test_get_grid_edge_count
 
   use bmif_2_0, only: BMI_FAILURE
   use bmiprmssoil
@@ -7,17 +7,16 @@ program test_get_grid_rank
   implicit none
 
   integer, parameter :: grid_id = 0
-  integer, parameter :: expected_rank = 1
-
+  integer, parameter :: expected = 13
   type (bmi_prms_soil) :: m
-  integer :: grid_rank
+  integer :: count
 
   status = m%initialize(config_file)
-  status = m%get_grid_rank(grid_id, grid_rank)
+  status = m%get_grid_edge_count(grid_id, count)
   status = m%finalize()
-
-  if (grid_rank /= expected_rank) then
-     write(*,*) grid_rank
+  
+  if (count /= expected) then
+     write(*,*) count
      stop BMI_FAILURE
   end if
-end program test_get_grid_rank
+end program test_get_grid_edge_count

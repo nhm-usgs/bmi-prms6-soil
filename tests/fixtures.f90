@@ -1,10 +1,9 @@
 module fixtures
     use iso_fortran_env
-  implicit none 
+  implicit none
 
-  character (len=*), parameter :: config_file = "./pipestem/control.simple1"
-
-  character (len=*), parameter :: var_name = "hru_ppt"
+  character (len=*), parameter :: config_file = 'control.default'
+  character (len=*), parameter :: var_name = "soil_moist"
 
   integer :: status
   
@@ -56,7 +55,21 @@ contains
        !write (*,*)
     end do
     write (*,*)
-    end subroutine print_1darray
+  end subroutine print_1darray
+
+  subroutine print_d_1darray(array, dims)
+    integer :: dims(1)
+    double precision, dimension(dims(1)) :: array
+    integer :: i, j
+
+    do j = 1, dims(1)
+       !do i = 1, dims(2)
+          write (*,*) array(j)
+       !end do
+       !write (*,*)
+    end do
+    write (*,*)
+  end subroutine print_d_1darray
 
     subroutine print_i_1darray(array, dims)
     integer :: dims(1)
