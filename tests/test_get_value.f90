@@ -162,7 +162,7 @@ contains
     integer, parameter :: size = 6
     integer, parameter, dimension(rank) :: shape = (/ 6 /)
     integer, parameter, dimension(shape(1)) :: &
-         expected = (/ 1981, 12, 31, 0, 0, 0 /)
+         expected = (/ 2016, 1, 31, 0, 0, 0 /)
     integer :: tval(size)
     integer :: i, status
     double precision :: endtime
