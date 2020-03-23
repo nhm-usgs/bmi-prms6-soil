@@ -46,8 +46,6 @@
         endif
     enddo
     !status = m%get_value(var_name, tval)
-    code = m%finalize()
-
 
     ! Visual inspection.
     write(*,*) "Test 1"
@@ -63,6 +61,7 @@
             exit
         end if
     end do
+    code = m%finalize()
 
     end function test1
 ! Test getting r64 hru_area.
@@ -91,7 +90,6 @@
         endif
     enddo
     !status = m%get_value(var_name, tval)
-    status = m%finalize()
 
     ! Visual inspection.
     write(*,*) "Test 2"
@@ -106,6 +104,7 @@
           status = BMI_FAILURE
        end if
     end do
+    status = m%finalize()
   end function test2
 
 end program test_get_value_ptr
