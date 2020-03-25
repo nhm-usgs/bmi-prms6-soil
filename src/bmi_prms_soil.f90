@@ -776,7 +776,7 @@
         'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
         'prf_dunnian_flow', 'upslope_dunnian_flow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
-        type = "double"
+        type = "double precision"
         bmi_status = BMI_SUCCESS
     case('nowtime')
         type = "integer"
