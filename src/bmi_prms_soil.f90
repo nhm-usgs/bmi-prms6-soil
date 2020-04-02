@@ -1853,13 +1853,20 @@
       character (len=*), intent(in) :: name
       integer, intent(in) :: src(:)
       integer :: bmi_status
+      logical :: tmp = .false.  ! Fortran BMI 2.0 doesn't support logical type
     
       select case(name)
       case('srunoff_updated_soil')
-          this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
+          if (src(1) /= 0) then
+             tmp = .true.
+          end if
+          this%model%model_simulation%runoff%srunoff_updated_soil = tmp
           bmi_status = BMI_SUCCESS
       case('transp_on')
-          this%model%model_simulation%transpiration%transp_on = src
+          if (src(1) /= 0) then
+             tmp = .true.
+          end if
+          this%model%model_simulation%transpiration%transp_on = tmp
           bmi_status = BMI_SUCCESS
       case default
          bmi_status = BMI_FAILURE
