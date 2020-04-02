@@ -1,1 +1,10 @@
 pipestem/
+output/
+*.simple1
+*.bak
+*.nc
+*.txt
+*.default
+*.swo
+sf_data
+*.out

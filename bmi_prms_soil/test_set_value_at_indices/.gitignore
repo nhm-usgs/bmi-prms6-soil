@@ -1,11 +1,10 @@
-output/
 pipestem/
-*.nc
-*.wbal
-*.txt
-*.out
-*.default
+output/
 *.simple1
-*.msgs
+*.bak
+*.nc
+*.txt
+*.default
 *.swo
 sf_data
+*.out
