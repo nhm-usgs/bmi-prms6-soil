@@ -46,7 +46,7 @@ contains
   subroutine print_1darray(array, dims)
     integer :: dims(1)
     real, dimension(dims(1)) :: array
-    integer :: i, j
+    integer :: j
 
     do j = 1, dims(1)
        !do i = 1, dims(2)
@@ -60,7 +60,7 @@ contains
   subroutine print_d_1darray(array, dims)
     integer :: dims(1)
     double precision, dimension(dims(1)) :: array
-    integer :: i, j
+    integer :: j
 
     do j = 1, dims(1)
        !do i = 1, dims(2)
@@ -74,7 +74,7 @@ contains
     subroutine print_i_1darray(array, dims)
     integer :: dims(1)
     integer, dimension(dims(1)) :: array
-    integer :: i, j
+    integer :: j
 
     do j = 1, dims(1)
        !do i = 1, dims(2)
