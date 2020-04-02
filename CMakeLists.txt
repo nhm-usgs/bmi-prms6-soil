@@ -4,6 +4,13 @@ project(bmi-prms6-soil Fortran)
 
 set(bmiprms6soil_lib bmiprmssoil)
 
+# Set compiler flags for gfortran.
+if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=f2008 -fall-intrinsics")
+  set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -O0 -g -fcheck=all -Wall")
+  set(CMAKE_Fortran_FLAGS_RELEASE "${CMAKE_Fortran_FLAGS_RELEASE} -O3 -funroll-all-loops -finline-functions")
+endif()
+
 # Locate the installed diffusionf library (via CMAKE_PREFIX_PATH).
 find_library(prms6_lib prmslib)
 find_library(coretran_lib coretran)
