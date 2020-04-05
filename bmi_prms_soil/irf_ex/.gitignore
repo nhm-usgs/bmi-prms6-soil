@@ -1,3 +1,12 @@
+output/
 pipestem/
-pipestem_soil/
-pipestem_surface/
+*.out
+*.wbal
+*.bak
+*.txt
+*.swo
+control*.*
+*.nc
+sf_data
+*.msgs
+
