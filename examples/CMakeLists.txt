@@ -1,6 +1,6 @@
 include(CTest)
 
-include_directories(${CMAKE_BINARY_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR}/src ${prmssurfacelibmod})
 message(STATUS "example include: ${CMAKE_BINARY_DIR}/src")
 
 function(make_example example_name)
