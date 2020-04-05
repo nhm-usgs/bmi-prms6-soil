@@ -24,7 +24,7 @@ before_install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda create -n _test python=$TRAVIS_PYTHON_VERSION
-      fortran-compiler cmake libnetcdf netcdf-fortran coretran prms
+      fortran-compiler cmake libnetcdf netcdf-fortran coretran prms prms_surface
       -c conda-forge -c csdms-stack
   - source activate _test
 
