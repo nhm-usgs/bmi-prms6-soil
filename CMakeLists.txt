@@ -6,7 +6,7 @@ set(bmiprms6soil_lib bmiprmssoil)
 
 # Locate the installed diffusionf library (via CMAKE_PREFIX_PATH).
 find_library(prms6_lib prmslib)
-find_library(bmiprms6surface_lib bmiprmssurfacelib)
+find_library(bmiprms6surface_lib bmiprmssurface)
 find_library(coretran_lib coretran)
 find_library(netcdf_lib netcdf)
 find_library(netcdff_lib netcdff)
