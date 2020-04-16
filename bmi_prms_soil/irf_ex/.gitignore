@@ -1,3 +1,12 @@
 pipestem/
 pipestem_soil/
 pipestem_surface/
+output/
+*.simple1
+*.bak
+*.nc
+*.txt
+*.default
+*.swo
+sf_data
+*.out

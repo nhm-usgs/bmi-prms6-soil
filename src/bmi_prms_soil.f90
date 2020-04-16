@@ -427,6 +427,9 @@
         'last_ssstor')
         grid = 2
         bmi_status = BMI_SUCCESS
+    case('nowtime')
+        grid = 3    
+        bmi_status = BMI_SUCCESS
     case default
         grid = -1
         bmi_status = BMI_FAILURE
@@ -449,6 +452,9 @@
         bmi_status = BMI_SUCCESS
     case(2)
         type = 'scalar'
+        bmi_status = BMI_FAILURE
+    case(3)
+        type = 'vector'
         bmi_status = BMI_FAILURE
     case default
         type = "-"
@@ -473,6 +479,9 @@
     case(2)
         rank = 0
         bmi_status = BMI_SUCCESS
+    case(3)
+        rank = 1
+        bmi_status = BMI_SUCCESS
     case default
         rank = -1
         bmi_status = BMI_FAILURE
@@ -496,7 +505,10 @@
      case(2)
          shape(:) = [1]
          bmi_status = BMI_SUCCESS
-      case default
+     case(3)
+         shape(:) = [6]
+         bmi_status = BMI_SUCCESS
+     case default
          shape(:) = -1
          bmi_status = BMI_FAILURE
       end select
@@ -518,6 +530,9 @@
         bmi_status = BMI_SUCCESS
     case(2)
         size = 1
+        bmi_status = BMI_SUCCESS
+    case(3)
+        size = 6
         bmi_status = BMI_SUCCESS
     case default
         size = -1
@@ -569,6 +584,9 @@
     case(2)
         x = -1.d0
         bmi_status = BMI_SUCCESS
+    case(3)
+        x = dble([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        bmi_status = BMI_SUCCESS
     case default
         x = [-1.0]
         bmi_status = BMI_FAILURE
@@ -591,6 +609,9 @@
         bmi_status = BMI_SUCCESS
     case(2)
         y = -1.d0
+        bmi_status = BMI_SUCCESS
+    case(3)
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case default
         y = [-1.0]
@@ -615,6 +636,9 @@
     case(2)
         z = -1.d0
         bmi_status = BMI_SUCCESS
+    case(3)
+        z(:) = -1.d0
+        bmi_status = BMI_SUCCESS
     case default
         z = [-1.0]
         bmi_status = BMI_FAILURE
@@ -629,7 +653,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case(0:2)
+      case(0:3)
          bmi_status = this%get_grid_size(grid, count)
       case default
          count = -1
@@ -645,7 +669,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case (0:2)
+      case (0:3)
          bmi_status = this%get_grid_node_count(grid, count)
          count = count - 1
       case default
@@ -662,7 +686,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case (0:2)
+      case (0:3)
          count = 0
          bmi_status = BMI_SUCCESS
       case default
