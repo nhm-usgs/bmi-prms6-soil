@@ -1066,7 +1066,12 @@
             size = -1
             bmi_status = BMI_FAILURE
         endif
-
+    case('last_soil_moist')
+        size = sizeof(this%model%model_simulation%soil%last_soil_moist)
+        bmi_status = BMI_SUCCESS
+    case('last_ssstor')
+        size = sizeof(this%model%model_simulation%soil%last_ssstor)
+        bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
