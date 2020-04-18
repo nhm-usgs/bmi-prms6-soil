@@ -669,7 +669,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case (0:3)
+      case(0:3)
          bmi_status = this%get_grid_node_count(grid, count)
          count = count - 1
       case default
@@ -686,7 +686,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case (0:3)
+      case(0:3)
          count = 0
          bmi_status = BMI_SUCCESS
       case default
