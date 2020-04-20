@@ -765,7 +765,7 @@
         
             !runoff
         'dprst_evap_hru', 'infil', 'sroff', 'hru_area_perv', 'hru_frac_perv', &
-        'hru_impervevap', 'soil_moist_chg', 'soil_rech_chg', &
+        'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg', &
         
             !potet
         'potet', &
@@ -792,11 +792,11 @@
         'soil_lower',  & 
         'soil_to_ssr', 'ssres_in', 'swale_actet', &
         'pfr_dunnian_flow', & 
-        'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor')
+        'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor', &
+        'soil_rechr')
         type = "real"
         bmi_status = BMI_SUCCESS
-    case( 'soil_rechr', &
-        'strm_seg_in', &
+    case('strm_seg_in', &
         'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
         'prf_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
@@ -828,6 +828,7 @@
         
         !runoff
         'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_ch', 'soil_rechr_chg', &
+        'dprst_seep_hru', 'hru_impervevap', &
         !potet
         'potet', &
         
@@ -851,7 +852,7 @@
     case('strm_seg_in')
         units = "ft3 s-1"
         bmi_status = BMI_SUCCESS
-    case('snow_cov_area')
+    case('snowcov_area', 'hru_area_perv')
         units = 'acres'
         bmi_status = BMI_SUCCESS
     case default
