@@ -820,6 +820,8 @@
     character (len=*), intent(in) :: name
     character (len=*), intent(out) :: units
     integer :: bmi_status
+    
+    bmi_status = BMI_SUCCESS
 
     select case(name)
     case( &
@@ -827,7 +829,7 @@
         "hru_ppt", &
         
         !runoff
-        'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_ch', 'soil_rechr_chg', &
+        'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_chg', 'soil_rechr_chg', &
         'dprst_seep_hru', 'hru_impervevap', &
         !potet
         'potet', &
@@ -848,13 +850,12 @@
         'pref_flow_max', 'pref_flow_thrsh', 'hru_sz_cascadeflow', &
         'upslope_dunnianflow', 'upslope_interflow')
         units = "in"
-        bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
+   case('strm_seg_in')
         units = "ft3 s-1"
-        bmi_status = BMI_SUCCESS
-    case('snowcov_area', 'hru_area_perv')
-        units = 'acres'
-        bmi_status = BMI_SUCCESS
+    case('snowcov_area', 'hru_area_perv', 'snowcov_area')
+        units = 'acres'       
+    case('hru_frac_perv')
+        units = 'fraction'
     case default
         units = "-"
         bmi_status = BMI_FAILURE
