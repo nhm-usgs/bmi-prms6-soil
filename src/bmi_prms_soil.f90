@@ -1316,7 +1316,7 @@
             bmi_status = BMI_SUCCESS
         else
             dest(:) = -1.d0
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('last_soil_moist')
         dest = [this%model%model_simulation%soil%last_soil_moist]
