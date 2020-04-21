@@ -806,7 +806,7 @@
         type = "integer"
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'transp_on')
-        type = 'logical'
+        type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
@@ -848,14 +848,25 @@
         !soil (this)
         'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
         'pref_flow_max', 'pref_flow_thrsh', 'hru_sz_cascadeflow', &
-        'upslope_dunnianflow', 'upslope_interflow')
+        'upslope_dunnianflow', 'upslope_interflow', 'soil2gw_max', &
+        'sat_threshold', 'cap_infil_tot', 'cap_waterin', 'dunnian_flow', &
+        'grav_dunnian_flow', 'gvr2pfr', 'perv_actet', 'pref_flow_infil', &
+        'pref_flow_stor', 'soil_lower', 'soil_to_ssr', 'ssres_in', &
+        'swale_actet','pfr_dunnian_flow', 'last_soil_moist', 'last_ssstor', &
+        'hru_actet', 'ssres_stor', 'pref_flow', 'slow_stor', )
         units = "in"
     case('strm_seg_in')
         units = "ft3 s-1"
     case('snowcov_area', 'hru_area_perv')
         units = 'acres'       
-    case('hru_frac_perv')
+    case('hru_frac_perv', 'pref_flow_den')
         units = 'fraction'
+    case('ssr2gw_rate', 'slowcoef_lin', 'fastcoef_lin')
+        units = 'fraction day-1'
+    case('srunoff_updated_soil', 'transp_on', 'ssr2gw_exp', 'slowcoef_sq', &
+        'fastcoef_sq', 'nowtime')
+        units = 'none'
+
     case default
         units = "-"
         bmi_status = BMI_FAILURE
