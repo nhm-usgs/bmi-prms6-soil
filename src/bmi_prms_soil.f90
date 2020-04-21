@@ -850,9 +850,9 @@
         'pref_flow_max', 'pref_flow_thrsh', 'hru_sz_cascadeflow', &
         'upslope_dunnianflow', 'upslope_interflow')
         units = "in"
-   case('strm_seg_in')
+    case('strm_seg_in')
         units = "ft3 s-1"
-    case('snowcov_area', 'hru_area_perv', 'snowcov_area')
+    case('snowcov_area', 'hru_area_perv')
         units = 'acres'       
     case('hru_frac_perv')
         units = 'fraction'
@@ -1966,14 +1966,30 @@
       class (bmi_prms_soil), intent(inout) :: this
       character (len=*), intent(in) :: name
       integer, intent(in) :: src(:)
-      integer :: bmi_status
-    
+      integer :: bmi_status, n_elements, gridid, i, status
+      logical, allocatable, dimension(:) :: boolvals
+             
+      status = this%get_var_grid(name,gridid)
+      status = this%get_grid_size(gridid, n_elements)
+
       select case(name)
       case('srunoff_updated_soil')
-          this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
+          if(src(1) == 0) then
+              this%model%model_simulation%runoff%srunoff_updated_soil = .false.
+          else
+              this%model%model_simulation%runoff%srunoff_updated_soil = .true.
+          endif
           bmi_status = BMI_SUCCESS
       case('transp_on')
-          this%model%model_simulation%transpiration%transp_on = src
+        allocate(boolvals(n_elements))
+        do i = 1,n_elements
+          if(src(i).eq.0) then 
+              boolvals(i) = .false.
+          else 
+              boolvals(i) = .true.
+          endif
+        enddo
+          this%model%model_simulation%transpiration%transp_on = boolvals
           bmi_status = BMI_SUCCESS
       case default
          bmi_status = BMI_FAILURE
