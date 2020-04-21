@@ -90,7 +90,7 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 31
+    integer, parameter :: input_item_count = 32
     integer, parameter :: output_item_count = 49
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
@@ -107,7 +107,7 @@
         'soil_rechr_chg      ', & !r32 by nhru
         'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        !'strm_seg_in         ', & !r64 by nsegment not yet implemented
+        'strm_seg_in         ', & !r64 by nsegment not yet implemented
         
         !potet
         'potet               ', & !r32 by nhru
@@ -853,7 +853,7 @@
         'grav_dunnian_flow', 'gvr2pfr', 'perv_actet', 'pref_flow_infil', &
         'pref_flow_stor', 'soil_lower', 'soil_to_ssr', 'ssres_in', &
         'swale_actet','pfr_dunnian_flow', 'last_soil_moist', 'last_ssstor', &
-        'hru_actet', 'ssres_stor', 'pref_flow', 'slow_stor', )
+        'hru_actet', 'ssres_stor', 'pref_flow', 'slow_stor', 'slow_flow')
         units = "in"
     case('strm_seg_in')
         units = "ft3 s-1"
@@ -947,7 +947,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('hru_frac_perv')
         size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
@@ -1015,7 +1015,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('perv_actet')
         size = sizeof(this%model%model_simulation%soil%perv_actet(1))
@@ -1069,7 +1069,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('upslope_interflow')
         if(this%model%control_data%cascade_flag%value == 1) then
@@ -1077,7 +1077,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('last_soil_moist')
         size = sizeof(this%model%model_simulation%soil%last_soil_moist)
@@ -1189,8 +1189,8 @@
             dest = [this%model%model_simulation%soil%hru_sz_cascadeflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.0
+            bmi_status = BMI_SUCCESS
         endif
     case('perv_actet')
         dest = [this%model%model_simulation%soil%perv_actet]
@@ -1290,8 +1290,8 @@
             dest = [this%model%model_simulation%runoff%strm_seg_in]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('grav_dunnian_flow')
         dest = [this%model%model_simulation%soil%grav_dunnian_flow]
@@ -1307,15 +1307,15 @@
             dest = [this%model%model_simulation%soil%upslope_dunnianflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('upslope_interflow')
         if(this%model%control_data%cascade_flag%value == 1) then
             dest = [this%model%model_simulation%soil%upslope_interflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
+            dest(:) = -1.d0
             bmi_status = BMI_FAILURE
         endif
     case('last_soil_moist')
