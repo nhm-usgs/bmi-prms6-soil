@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 32
-    integer, parameter :: output_item_count = 49
+    integer, parameter :: output_item_count = 52
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -197,6 +197,11 @@
         
         !prsm_time
         'nowtime             ', & !i32(6)
+
+        !control
+        'dyn_dprst_flag      ', & !iScalar
+        'dyn_imperv_flag     ', & !iScalar
+        'cascade_flag        ', & !iScalar
 
     !###################################################!
         ! first cut at                                      !
@@ -424,7 +429,8 @@
         grid = 1
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'last_soil_moist', & 
-        'last_ssstor')
+        'last_ssstor', 'dyn_dprst_flag', 'dyn_imperv_flag', &
+        'cascade_flag')
         grid = 2
         bmi_status = BMI_SUCCESS
     case('nowtime')
@@ -805,7 +811,8 @@
     case('nowtime')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'transp_on')
+    case('srunoff_updated_soil', 'transp_on', 'cascade_flag', &
+        'dyn_dprst_flag', 'dyn_imperv_flag')
         type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
@@ -863,13 +870,13 @@
         units = 'fraction'
     case('ssr2gw_rate', 'slowcoef_lin', 'fastcoef_lin')
         units = 'fraction day-1'
-    case('srunoff_updated_soil', 'transp_on', 'ssr2gw_exp', 'slowcoef_sq', &
-        'fastcoef_sq', 'nowtime')
-        units = 'none'
+    ! case('srunoff_updated_soil', 'transp_on', 'ssr2gw_exp', 'slowcoef_sq', &
+    !     'fastcoef_sq', 'nowtime', 'cascade_flag', 'dyn_dprst_flag', 'dyn_imperv_flag')
+    !     units = 'none'
 
     case default
         units = "-"
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     end select
     end function prms_var_units
 
@@ -941,6 +948,15 @@
     case('dprst_seep_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
+    case('cascade_flag')
+        size = sizeof(this%model%control_data%cascade_flag%value)
+        bmi_status = BMI_SUCCESS
+    case('dyn_dprst_flag')
+        size = sizeof(this%model%control_data%dyn_dprst_flag%value)
+        bmi_status = BMI_SUCCESS
+    case('dyn_imperv_flag')
+        size = sizeof(this%model%control_data%dyn_imperv_flag%value)
+        bmi_status = BMI_SUCCESS       
     case('strm_seg_in')
         if(this%model%control_data%cascade_flag%value == 1) then
             size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
@@ -1137,6 +1153,15 @@
     case('nowtime')
         dest = [this%model%model_simulation%model_time%nowtime]
         bmi_status = BMI_SUCCESS
+    case('cascade_flag')
+        dest = [this%model%control_data%cascade_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('dyn_dprst_flag')
+        dest = [this%model%control_data%dyn_dprst_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('dyn_imperv_flag')
+        dest = [this%model%control_data%dyn_imperv_flag%value]
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE 
     end select
@@ -1234,7 +1259,7 @@
         dest = [this%model%model_simulation%climate%soil_rechr_max]
         bmi_status = BMI_SUCCESS
     case('soil_moist_max')
-        dest = [this%model%model_simulation%climate%soil_rechr_max]
+        dest = [this%model%model_simulation%climate%soil_moist_max]
         bmi_status = BMI_SUCCESS
         !soil
     case('pref_flow_den')
