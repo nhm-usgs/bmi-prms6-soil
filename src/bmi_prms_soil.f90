@@ -90,8 +90,8 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 32
-    integer, parameter :: output_item_count = 52
+    integer, parameter :: input_item_count = 29
+    integer, parameter :: output_item_count = 48
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -103,11 +103,11 @@
         'hru_frac_perv       ', & !r32 by nhru
         'hru_impervevap      ', & !r32 by nhru
         'infil               ', & !r32 by nhru
-        'soil_moist_chg      ', & !r32 by nhru
-        'soil_rechr_chg      ', & !r32 by nhru
+        ! 'soil_moist_chg      ', & !r32 by nhru
+        ! 'soil_rechr_chg      ', & !r32 by nhru
         'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        'strm_seg_in         ', & !r64 by nsegment not yet implemented
+        ! 'strm_seg_in         ', & !r64 by nsegment not yet implemented
         
         !potet
         'potet               ', & !r32 by nhru
@@ -162,7 +162,7 @@
         'dunnian_flow        ', & !r32 by nhru
         'grav_dunnian_flow   ', & !r32 by nhru
         'gvr2pfr             ', & !r32 by nhru
-        'hru_sz_cascadeflow  ', & !r32 by nhru
+        ! 'hru_sz_cascadeflow  ', & !r32 by nhru
         'perv_actet          ', & !r32 by nhru
         'pref_flow_den       ', & !r32 by nhru
         'pref_flow_infil     ', & !r32 by nhru
@@ -174,8 +174,8 @@
         'ssres_in            ', & !r32 by nhru
         'swale_actet         ', & !r32 by nhru
         ! 2 below not yet active will ! for now
-        'upslope_dunnianflow ', &!r64 by nhru
-        'upslope_interflow   ', & !r64 by nhru
+        ! 'upslope_dunnianflow ', &!r64 by nhru
+        ! 'upslope_interflow   ', & !r64 by nhru
         'pfr_dunnian_flow    ', & !r64 by nhru
         'last_soil_moist     ',& !r64 by 1
         'last_ssstor         ', & !r64 by 1
@@ -193,7 +193,7 @@
         !runoff
         'infil               ', & !r32 by nhru transfer to surface
         'sroff               ', & !r32 by nhru transfer to surface
-        'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
+        ! 'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
         
         !prsm_time
         'nowtime             ', & !i32(6)
@@ -797,14 +797,13 @@
         'pref_flow_infil', 'pref_flow_stor', & 
         'soil_lower',  & 
         'soil_to_ssr', 'ssres_in', 'swale_actet', &
-        'pfr_dunnian_flow', & 
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor', &
         'soil_rechr')
         type = "real"
         bmi_status = BMI_SUCCESS
     case('strm_seg_in', &
         'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
-        'prf_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
+        'pfr_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
         type = "double precision"
         bmi_status = BMI_SUCCESS
