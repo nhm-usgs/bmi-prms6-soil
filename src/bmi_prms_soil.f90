@@ -2002,32 +2002,19 @@
       character (len=*), intent(in) :: name
       integer, intent(in) :: src(:)
       integer :: bmi_status, n_elements, gridid, i, status
-      logical, allocatable, dimension(:) :: boolvals
              
       status = this%get_var_grid(name,gridid)
       status = this%get_grid_size(gridid, n_elements)
 
       select case(name)
       case('srunoff_updated_soil')
-          if(src(1) == 0) then
-              this%model%model_simulation%runoff%srunoff_updated_soil = .false.
-          else
-              this%model%model_simulation%runoff%srunoff_updated_soil = .true.
-          endif
-          bmi_status = BMI_SUCCESS
+        this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
+        bmi_status = BMI_SUCCESS
       case('transp_on')
-        allocate(boolvals(n_elements))
-        do i = 1,n_elements
-          if(src(i).eq.0) then 
-              boolvals(i) = .false.
-          else 
-              boolvals(i) = .true.
-          endif
-        enddo
-          this%model%model_simulation%transpiration%transp_on = boolvals
-          bmi_status = BMI_SUCCESS
+        this%model%model_simulation%transpiration%transp_on = src
+        bmi_status = BMI_SUCCESS
       case default
-         bmi_status = BMI_FAILURE
+        bmi_status = BMI_FAILURE
       end select
     end function prms_set_int
     
