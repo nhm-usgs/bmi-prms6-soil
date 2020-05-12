@@ -90,8 +90,8 @@
         component_name = "prms6-BMI-SOIL"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 31
-    integer, parameter :: output_item_count = 49
+    integer, parameter :: input_item_count = 29
+    integer, parameter :: output_item_count = 48
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -103,11 +103,11 @@
         'hru_frac_perv       ', & !r32 by nhru
         'hru_impervevap      ', & !r32 by nhru
         'infil               ', & !r32 by nhru
-        'soil_moist_chg      ', & !r32 by nhru
-        'soil_rechr_chg      ', & !r32 by nhru
+        ! 'soil_moist_chg      ', & !r32 by nhru
+        ! 'soil_rechr_chg      ', & !r32 by nhru
         'sroff               ', & !r32 by nhru
         'srunoff_updated_soil', & !logical by 1
-        !'strm_seg_in         ', & !r64 by nsegment not yet implemented
+        ! 'strm_seg_in         ', & !r64 by nsegment not yet implemented
         
         !potet
         'potet               ', & !r32 by nhru
@@ -162,7 +162,7 @@
         'dunnian_flow        ', & !r32 by nhru
         'grav_dunnian_flow   ', & !r32 by nhru
         'gvr2pfr             ', & !r32 by nhru
-        'hru_sz_cascadeflow  ', & !r32 by nhru
+        ! 'hru_sz_cascadeflow  ', & !r32 by nhru
         'perv_actet          ', & !r32 by nhru
         'pref_flow_den       ', & !r32 by nhru
         'pref_flow_infil     ', & !r32 by nhru
@@ -174,8 +174,8 @@
         'ssres_in            ', & !r32 by nhru
         'swale_actet         ', & !r32 by nhru
         ! 2 below not yet active will ! for now
-        'upslope_dunnianflow ', &!r64 by nhru
-        'upslope_interflow   ', & !r64 by nhru
+        ! 'upslope_dunnianflow ', &!r64 by nhru
+        ! 'upslope_interflow   ', & !r64 by nhru
         'pfr_dunnian_flow    ', & !r64 by nhru
         'last_soil_moist     ',& !r64 by 1
         'last_ssstor         ', & !r64 by 1
@@ -193,10 +193,15 @@
         !runoff
         'infil               ', & !r32 by nhru transfer to surface
         'sroff               ', & !r32 by nhru transfer to surface
-        'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
+        ! 'strm_seg_in         ', & !r64 by nhru transfer to surface not yet implemented
         
         !prsm_time
         'nowtime             ', & !i32(6)
+
+        !control
+        'dyn_dprst_flag      ', & !iScalar
+        'dyn_imperv_flag     ', & !iScalar
+        'cascade_flag        ', & !iScalar
 
     !###################################################!
         ! first cut at                                      !
@@ -424,7 +429,8 @@
         grid = 1
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'last_soil_moist', & 
-        'last_ssstor')
+        'last_ssstor', 'dyn_dprst_flag', 'dyn_imperv_flag', &
+        'cascade_flag')
         grid = 2
         bmi_status = BMI_SUCCESS
     case('nowtime')
@@ -791,22 +797,22 @@
         'pref_flow_infil', 'pref_flow_stor', & 
         'soil_lower',  & 
         'soil_to_ssr', 'ssres_in', 'swale_actet', &
-        'pfr_dunnian_flow', & 
         'hru_actet',  'ssres_stor', 'pref_flow', 'slow_flow',  'slow_stor', &
         'soil_rechr')
         type = "real"
         bmi_status = BMI_SUCCESS
     case('strm_seg_in', &
         'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
-        'prf_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
+        'pfr_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
         'last_soil_moist', 'last_ssstor')
         type = "double precision"
         bmi_status = BMI_SUCCESS
     case('nowtime')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'transp_on')
-        type = 'logical'
+    case('srunoff_updated_soil', 'transp_on', 'cascade_flag', &
+        'dyn_dprst_flag', 'dyn_imperv_flag')
+        type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
@@ -820,6 +826,8 @@
     character (len=*), intent(in) :: name
     character (len=*), intent(out) :: units
     integer :: bmi_status
+    
+    bmi_status = BMI_SUCCESS
 
     select case(name)
     case( &
@@ -827,7 +835,7 @@
         "hru_ppt", &
         
         !runoff
-        'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_ch', 'soil_rechr_chg', &
+        'dprst_evap_hru', 'infil', 'sroff', 'soil_moist_chg', 'soil_rechr_chg', &
         'dprst_seep_hru', 'hru_impervevap', &
         !potet
         'potet', &
@@ -846,18 +854,28 @@
         !soil (this)
         'soil_moist_tot', 'soil_to_gw', 'ssr_to_gw', 'ssres_flow', &
         'pref_flow_max', 'pref_flow_thrsh', 'hru_sz_cascadeflow', &
-        'upslope_dunnianflow', 'upslope_interflow')
+        'upslope_dunnianflow', 'upslope_interflow', 'soil2gw_max', &
+        'sat_threshold', 'cap_infil_tot', 'cap_waterin', 'dunnian_flow', &
+        'grav_dunnian_flow', 'gvr2pfr', 'perv_actet', 'pref_flow_infil', &
+        'pref_flow_stor', 'soil_lower', 'soil_to_ssr', 'ssres_in', &
+        'swale_actet','pfr_dunnian_flow', 'last_soil_moist', 'last_ssstor', &
+        'hru_actet', 'ssres_stor', 'pref_flow', 'slow_stor', 'slow_flow')
         units = "in"
-        bmi_status = BMI_SUCCESS
     case('strm_seg_in')
         units = "ft3 s-1"
-        bmi_status = BMI_SUCCESS
     case('snowcov_area', 'hru_area_perv')
-        units = 'acres'
-        bmi_status = BMI_SUCCESS
+        units = 'acres'       
+    case('hru_frac_perv', 'pref_flow_den')
+        units = 'fraction'
+    case('ssr2gw_rate', 'slowcoef_lin', 'fastcoef_lin')
+        units = 'fraction day-1'
+    ! case('srunoff_updated_soil', 'transp_on', 'ssr2gw_exp', 'slowcoef_sq', &
+    !     'fastcoef_sq', 'nowtime', 'cascade_flag', 'dyn_dprst_flag', 'dyn_imperv_flag')
+    !     units = 'none'
+
     case default
         units = "-"
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     end select
     end function prms_var_units
 
@@ -929,13 +947,22 @@
     case('dprst_seep_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
+    case('cascade_flag')
+        size = sizeof(this%model%control_data%cascade_flag%value)
+        bmi_status = BMI_SUCCESS
+    case('dyn_dprst_flag')
+        size = sizeof(this%model%control_data%dyn_dprst_flag%value)
+        bmi_status = BMI_SUCCESS
+    case('dyn_imperv_flag')
+        size = sizeof(this%model%control_data%dyn_imperv_flag%value)
+        bmi_status = BMI_SUCCESS       
     case('strm_seg_in')
         if(this%model%control_data%cascade_flag%value == 1) then
             size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('hru_frac_perv')
         size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
@@ -1003,7 +1030,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('perv_actet')
         size = sizeof(this%model%model_simulation%soil%perv_actet(1))
@@ -1057,7 +1084,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('upslope_interflow')
         if(this%model%control_data%cascade_flag%value == 1) then
@@ -1065,7 +1092,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('last_soil_moist')
         size = sizeof(this%model%model_simulation%soil%last_soil_moist)
@@ -1125,6 +1152,15 @@
     case('nowtime')
         dest = [this%model%model_simulation%model_time%nowtime]
         bmi_status = BMI_SUCCESS
+    case('cascade_flag')
+        dest = [this%model%control_data%cascade_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('dyn_dprst_flag')
+        dest = [this%model%control_data%dyn_dprst_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('dyn_imperv_flag')
+        dest = [this%model%control_data%dyn_imperv_flag%value]
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE 
     end select
@@ -1177,8 +1213,8 @@
             dest = [this%model%model_simulation%soil%hru_sz_cascadeflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.0
+            bmi_status = BMI_SUCCESS
         endif
     case('perv_actet')
         dest = [this%model%model_simulation%soil%perv_actet]
@@ -1222,7 +1258,7 @@
         dest = [this%model%model_simulation%climate%soil_rechr_max]
         bmi_status = BMI_SUCCESS
     case('soil_moist_max')
-        dest = [this%model%model_simulation%climate%soil_rechr_max]
+        dest = [this%model%model_simulation%climate%soil_moist_max]
         bmi_status = BMI_SUCCESS
         !soil
     case('pref_flow_den')
@@ -1278,8 +1314,8 @@
             dest = [this%model%model_simulation%runoff%strm_seg_in]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('grav_dunnian_flow')
         dest = [this%model%model_simulation%soil%grav_dunnian_flow]
@@ -1295,16 +1331,16 @@
             dest = [this%model%model_simulation%soil%upslope_dunnianflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('upslope_interflow')
         if(this%model%control_data%cascade_flag%value == 1) then
             dest = [this%model%model_simulation%soil%upslope_interflow]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('last_soil_moist')
         dest = [this%model%model_simulation%soil%last_soil_moist]
@@ -1965,17 +2001,20 @@
       class (bmi_prms_soil), intent(inout) :: this
       character (len=*), intent(in) :: name
       integer, intent(in) :: src(:)
-      integer :: bmi_status
-    
+      integer :: bmi_status, n_elements, gridid, i, status
+             
+      status = this%get_var_grid(name,gridid)
+      status = this%get_grid_size(gridid, n_elements)
+
       select case(name)
       case('srunoff_updated_soil')
-          this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
-          bmi_status = BMI_SUCCESS
+        this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
+        bmi_status = BMI_SUCCESS
       case('transp_on')
-          this%model%model_simulation%transpiration%transp_on = src
-          bmi_status = BMI_SUCCESS
+        this%model%model_simulation%transpiration%transp_on = src
+        bmi_status = BMI_SUCCESS
       case default
-         bmi_status = BMI_FAILURE
+        bmi_status = BMI_FAILURE
       end select
     end function prms_set_int
     
