@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 29
-    integer, parameter :: output_item_count = 48
+    integer, parameter :: output_item_count = 46
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: &
         input_items = (/&
@@ -177,8 +177,8 @@
         ! 'upslope_dunnianflow ', &!r64 by nhru
         ! 'upslope_interflow   ', & !r64 by nhru
         'pfr_dunnian_flow    ', & !r64 by nhru
-        'last_soil_moist     ',& !r64 by 1
-        'last_ssstor         ', & !r64 by 1
+        !'last_soil_moist     ',& !r64 by 1
+        !'last_ssstor         ', & !r64 by 1
         !soilzone water-balance and pot calibration target
         'hru_actet           ', & !r32 by nhru
         'ssres_stor          ', & !r32 by nhru
@@ -428,8 +428,9 @@
     case('strm_seg_in')
         grid = 1
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'last_soil_moist', & 
-        'last_ssstor', 'dyn_dprst_flag', 'dyn_imperv_flag', &
+    case('srunoff_updated_soil', &
+        !'last_soil_moist', 'last_ssstor', &
+        'dyn_dprst_flag', 'dyn_imperv_flag', &
         'cascade_flag')
         grid = 2
         bmi_status = BMI_SUCCESS
@@ -803,8 +804,8 @@
         bmi_status = BMI_SUCCESS
     case('strm_seg_in', &
         'dprst_seep_hru', 'grav_dunnian_flow', 'gvr2pfr', &
-        'pfr_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow', &
-        'last_soil_moist', 'last_ssstor')
+        'pfr_dunnian_flow', 'upslope_dunnianflow', 'upslope_interflow')
+        !'last_soil_moist', 'last_ssstor')
         type = "double precision"
         bmi_status = BMI_SUCCESS
     case('nowtime')
@@ -858,7 +859,8 @@
         'sat_threshold', 'cap_infil_tot', 'cap_waterin', 'dunnian_flow', &
         'grav_dunnian_flow', 'gvr2pfr', 'perv_actet', 'pref_flow_infil', &
         'pref_flow_stor', 'soil_lower', 'soil_to_ssr', 'ssres_in', &
-        'swale_actet','pfr_dunnian_flow', 'last_soil_moist', 'last_ssstor', &
+        'swale_actet','pfr_dunnian_flow', &
+        !'last_soil_moist', 'last_ssstor', &
         'hru_actet', 'ssres_stor', 'pref_flow', 'slow_stor', 'slow_flow')
         units = "in"
     case('strm_seg_in')
@@ -1094,12 +1096,12 @@
             size = -1
             bmi_status = BMI_SUCCESS
         endif
-    case('last_soil_moist')
-        size = sizeof(this%model%model_simulation%soil%last_soil_moist)
-        bmi_status = BMI_SUCCESS
-    case('last_ssstor')
-        size = sizeof(this%model%model_simulation%soil%last_ssstor)
-        bmi_status = BMI_SUCCESS
+    !case('last_soil_moist')
+    !    size = sizeof(this%model%model_simulation%soil%last_soil_moist)
+    !    bmi_status = BMI_SUCCESS
+    !case('last_ssstor')
+    !    size = sizeof(this%model%model_simulation%soil%last_ssstor)
+    !    bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
@@ -1342,12 +1344,12 @@
             dest(:) = -1.d0
             bmi_status = BMI_SUCCESS
         endif
-    case('last_soil_moist')
-        dest = [this%model%model_simulation%soil%last_soil_moist]
-        bmi_status = BMI_SUCCESS
-    case('last_ssstor')
-        dest = [this%model%model_simulation%soil%last_ssstor]
-        bmi_status = BMI_SUCCESS
+    !case('last_soil_moist')
+    !    dest = [this%model%model_simulation%soil%last_soil_moist]
+    !    bmi_status = BMI_SUCCESS
+    !case('last_ssstor')
+    !    dest = [this%model%model_simulation%soil%last_ssstor]
+    !    bmi_status = BMI_SUCCESS
         case default
         dest = [-1.d0]
         bmi_status = BMI_FAILURE
