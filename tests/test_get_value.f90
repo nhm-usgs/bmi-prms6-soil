@@ -17,10 +17,11 @@
   end if
 
   ! test r64 by 1
-  retcode = test2()
-  if (retcode.ne.BMI_SUCCESS) then
-     stop BMI_FAILURE
-  end if
+  ! removed because var was removed
+!   retcode = test2()
+!   if (retcode.ne.BMI_SUCCESS) then
+!      stop BMI_FAILURE
+!   end if
 
     !test r64 by hru
   retcode = test3()
